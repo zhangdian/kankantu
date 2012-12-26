@@ -1,0 +1,19 @@
+0    INFO  [2012-12-26 15:09:28]  code: ea6c8ba592652e443149e883c7d8f001
+66   DEBUG [2012-12-26 15:09:28]  Request:
+66   DEBUG [2012-12-26 15:09:28]  POSThttps://api.weibo.com/oauth2/access_token
+1347 DEBUG [2012-12-26 15:09:29]  Response:
+1347 DEBUG [2012-12-26 15:09:29]  https StatusCode:200
+1347 DEBUG [2012-12-26 15:09:29]  Server:nginx/1.2.0
+1347 DEBUG [2012-12-26 15:09:29]  Date:Wed, 26 Dec 2012 07:09:35 GMT
+1347 DEBUG [2012-12-26 15:09:29]  Content-Type:text/plain;charset=UTF-8
+1347 DEBUG [2012-12-26 15:09:29]  Content-Length:160
+1347 DEBUG [2012-12-26 15:09:29]  Connection:keep-alive
+1347 DEBUG [2012-12-26 15:09:29]  Pragma:No-cache
+1348 DEBUG [2012-12-26 15:09:29]  Cache-Control:no-cache
+1348 DEBUG [2012-12-26 15:09:29]  Expires:Thu, 01 Jan 1970 00:00:00 GMT
+1348 DEBUG [2012-12-26 15:09:29]  Api-Server-IP:10.75.2.82
+1348 DEBUG [2012-12-26 15:09:29]  X-Varnish:550815051
+1348 DEBUG [2012-12-26 15:09:29]  Age:0
+1348 DEBUG [2012-12-26 15:09:29]  Via:1.1 varnish
+1377 DEBUG [2012-12-26 15:09:29]  {"access_token":"2.00zI7dGCU7cYIE0545331f780bLHnS","remind_in":"157679999","expires_in":157679999,"uid":"1930318973","scope":"fa1b2986b8fcb881802c7ac811ef2d33"}
+

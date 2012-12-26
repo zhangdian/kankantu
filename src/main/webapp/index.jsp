@@ -9,6 +9,7 @@
 </head>
 <body>
 建站中......<br />
-请联系<img alt="" src="http://moon.bd17kaka.net/files/img/email_wzmMLiUb.bmp">
+请联系<img alt="" src="http://moon.bd17kaka.net/files/img/email_wzmMLiUb.bmp"><br />
+<a href="http://moon.kankantu.org/">看看图</a>
 </body>
 </html>
