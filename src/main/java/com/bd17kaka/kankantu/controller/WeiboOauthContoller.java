@@ -24,7 +24,7 @@ import com.bd17kaka.kankantu.weibo4j.util.BareBonesBrowserLaunch;
 public class WeiboOauthContoller extends BaseController {
 
 	private static String key = "3790992882";
-	private static String password = "3790992882";
+	private static String password = "fa1b2986b8fcb881802c7ac811ef2d33";
 
 	@Resource(name="weiboService")
 	private WeiboService weiboService;
@@ -39,11 +39,14 @@ public class WeiboOauthContoller extends BaseController {
 	 * @throws WeiboException 
 	 */
 	@RequestMapping("/openOathPage.do")
-	public String openOathPage(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public void openOathPage(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+		// 不要使用weibo sdk自带的跳转函数，就直接跳转到授权页面
 		Oauth oauth = new Oauth();
-		BareBonesBrowserLaunch.openURL(oauth.authorize("code", key, password));
+//		BareBonesBrowserLaunch.openURL(oauth.authorize("code", key, password));
+//		request.getSession().setAttribute("oauth", oauth);
+//		return "main";
 		request.getSession().setAttribute("oauth", oauth);
-		return "main";
+		response.sendRedirect(oauth.authorize("code", key, password));
 	}
 	
 	/**

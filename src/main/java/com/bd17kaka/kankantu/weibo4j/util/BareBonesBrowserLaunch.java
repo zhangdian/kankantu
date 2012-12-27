@@ -34,6 +34,8 @@ public class BareBonesBrowserLaunch {
             IllegalArgumentException, InterruptedException, InvocationTargetException, IOException,
             NoSuchMethodException {
         String osName = System.getProperty("os.name", "");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~");
         if (osName.startsWith("Mac OS")) {
             Class fileMgr = Class.forName("com.apple.eio.FileManager");
             Method openURL = fileMgr.getDeclaredMethod("openURL", new Class[] { String.class });
