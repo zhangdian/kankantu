@@ -1,4 +1,4 @@
-package tools;
+package com.bd17kaka.kankantu.log;
 
 import org.apache.log4j.Logger;
 

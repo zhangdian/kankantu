@@ -8,8 +8,10 @@
 <link rel="stylesheet" href="style/style.css" />
 </head>
 <body>
-建站中......<br />
-请联系<img alt="" src="http://moon.bd17kaka.net/files/img/email_wzmMLiUb.bmp"><br />
-<a href="http://moon.kankantu.org/">看看图</a>
+<form action="/login.do" method="post">
+	用户名：<input type="text" id="user_name" name="user_name" /><br>
+	密码：<input type="password" id="password" name="password" /><br>
+	<input type="submit" value="提交" />
+</form>
 </body>
 </html>
