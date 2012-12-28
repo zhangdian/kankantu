@@ -31,7 +31,7 @@ public interface WeiboService {
 	 * @param id
 	 * @throws WeiboException 
 	 */
-	void repostWeibo(String id, String token) throws WeiboException;
+	void repostWeibo(String id);
 	
 	/**
 	 * 转发用户<code>userId</code>指定数量<code>num</code>的微博
