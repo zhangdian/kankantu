@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bd17kaka.kankantu.service.WeiboService;
+import com.bd17kaka.kankantu.utils.RedisUtils;
 import com.bd17kaka.kankantu.weibo4j.Oauth;
 import com.bd17kaka.kankantu.weibo4j.http.AccessToken;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
@@ -42,10 +43,6 @@ public class WeiboOauthContoller extends BaseController {
 	public void openOathPage(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
 		// 不要使用weibo sdk自带的跳转函数，就直接跳转到授权页面
 		Oauth oauth = new Oauth();
-//		BareBonesBrowserLaunch.openURL(oauth.authorize("code", key, password));
-//		request.getSession().setAttribute("oauth", oauth);
-//		return "main";
-		request.getSession().setAttribute("oauth", oauth);
 		response.sendRedirect(oauth.authorize("code", key, password));
 	}
 	
@@ -63,16 +60,12 @@ public class WeiboOauthContoller extends BaseController {
 		if (StringUtils.isEmpty(code)) {
 			return "main";
 		}
-		Oauth oauth = (Oauth) request.getSession().getAttribute("oauth");
-		if (null == oauth) {
-			return "main";
-		}
-		AccessToken accessToken = weiboService.getToken(oauth, code);
+		AccessToken accessToken = weiboService.getToken(code);
 		if (null == accessToken) {
 			return "main";
 		}
 		String token = accessToken.getAccessToken();
-		request.getSession().setAttribute("token", token);
+		RedisUtils.getRedisConn().set("weibo:token", token);
 		return "main";
 	}
 }

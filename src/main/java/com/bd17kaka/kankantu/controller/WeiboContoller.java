@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bd17kaka.kankantu.service.WeiboService;
+import com.bd17kaka.kankantu.utils.RedisUtils;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
 
 /**
@@ -36,14 +37,11 @@ public class WeiboContoller extends BaseController {
 	@RequestMapping("/repostWeibo.do")
 	public String repostWeibo(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
 		int num = 5;
-		String token = request.getSession().getAttribute("token").toString();
+		String token = RedisUtils.getRedisConn().get("weibo:token");
 		String userId = StringUtils.trimToEmpty(request.getParameter("user_id"));
-		System.out.println("aaaaaaaaaaaaaaaaaaa");
-		System.out.println(userId);
 		if (StringUtils.isEmpty(userId) || !StringUtils.isNumeric(userId)) {
 			return "main";
 		}
-		System.out.println("bbbbbbbbbbbbbbbbb");
 		weiboService.repostWeibo(userId, num, token);
 		request.setAttribute("status", "转发微博成功");
 		return "main";

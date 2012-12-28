@@ -29,3 +29,13 @@ ChangeLog:
 
 * 不直接转发微博，将微博保存到redis中;
 * 开一个后台进程，读redis中的数据，然后转发;
+
+####2012-12-29 V0.0.1.3
+ChangeLog:
+
+* 将微博保存到redis中，将token保存在redis中;
+* 为redis设置密码;
+* 开一个后台进程，转发redis中的微博;
+
+功能点：
+* 完成worker;

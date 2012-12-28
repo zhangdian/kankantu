@@ -15,7 +15,7 @@ public interface WeiboService {
 	 * @return
 	 * @throws WeiboException
 	 */
-	AccessToken getToken(Oauth oauth, String code) throws WeiboException;
+	AccessToken getToken(String code) throws WeiboException;
 	
 	/**
 	 * 获取某用户的最近<code>num</code>条微博的ID记录
