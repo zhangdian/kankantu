@@ -41,6 +41,7 @@ public class AdminContoller extends BaseController {
 				|| !"kankantu".equals(password)) {
 			return "index";
 		}
+		request.getSession().setAttribute("kankantu_user", userName);
 		return "main";
 	}
 }

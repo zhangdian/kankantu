@@ -37,7 +37,7 @@ public class IdentityFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 
 		// 获取保存在session中的用户名
-		String user = (String) req.getSession().getAttribute("user");
+		String user = (String) req.getSession().getAttribute("kankantu_user");
 
 		// 获取请求的URL
 		String srcUrl = req.getRequestURL().toString();
@@ -49,7 +49,7 @@ public class IdentityFilter implements Filter {
 		}else if(url.equals("login.do")){
 			chain.doFilter(req, resp);
 		}
-		else if (user == null || user != "sendcloud") {
+		else if (user == null) {
 			// 用户没有登陆
 			resp.sendRedirect("index.jsp");
 		} else {

@@ -56,7 +56,7 @@
 	</servlet-mapping>
 
  	<!-- 用户登陆过滤器filter -->
-<!-- 	<filter>
+	<filter>
 		<filter-name>IdentityFilter</filter-name>
 		<filter-class>com.bd17kaka.kankantu.filter.IdentityFilter</filter-class>
 	</filter>
@@ -67,6 +67,6 @@
 	<filter-mapping>
 		<filter-name>IdentityFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
-	</filter-mapping>  -->
+	</filter-mapping> 
 
 </web-app> 
