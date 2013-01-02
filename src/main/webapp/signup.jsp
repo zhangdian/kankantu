@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>登陆-kankantu</title>
+<title>注册-kankantu</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -63,17 +63,35 @@ body {
 </head>
 
 <body>
-	<jsp:include page="head.jsp">
-       	<jsp:param value="index" name="flag"/>
- 	</jsp:include>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					
+				</a> 
+				<a class="brand" href="http://www.kankantu.org/">看看图</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li class="active"><a href="/index.jsp">首页</a></li>
+						<li><a href="#about">关于</a></li>
+						<li><a href="#contact">联系我</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
 
 	<div class="container">
-		<form class="form-signin" action="login.do" method="post">
-			<h2 class="form-signin-heading">登陆信息</h2>
+		<form class="form-signin" action="/signup.do" method="post">
+			<h2 class="form-signin-heading">注册</h2>
 			<input type="text" class="input-block-level" placeholder="用户名"  id="user_name" name="user_name"> 
+			<input type="text" class="input-block-level" placeholder="邮件地址"  id="email" name="email"> 
 			<input type="password" class="input-block-level" placeholder="密码" id="password" name="password">
+			<input type="password" class="input-block-level" placeholder="确认密码" id="re_password" name="re_password">
 			<!-- <label class="checkbox"> <input type="checkbox" value="remember-me">Remember me</label> -->
-			<button class="btn btn-large btn-primary" type="submit">登陆</button>&nbsp;&nbsp;<a href="signup.jsp">没有账号？</a>
+			<label class="checkbox">${msg}</label>
+			<button class="btn btn-large btn-primary" type="submit">注册</button>
 		</form>
 
 	</div>

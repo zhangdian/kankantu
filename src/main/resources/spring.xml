@@ -15,76 +15,26 @@
 	<context:component-scan base-package="com.bd17kaka.kankantu" />
 
 	<!-- 数据源 -->
-	<bean id="C3P0DataSourceFather" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		abstract="true">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="autoCommitOnClose" value="false" />
-		<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
-		<property name="acquireIncrement" value="2" />
-		<!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
-		<property name="acquireRetryAttempts" value="30" />
-		<!--两次连接中间隔时间，单位毫秒。Default: 1000 -->
-		<property name="acquireRetryDelay" value="1000" />
-		<!-- 当连接池用完时客户端调用getConnection()后等待获取新连接的时间，超时后将抛出SQLException,如设为0则无限期等待。单位毫秒。Default:0 -->
-		<property name="checkoutTimeout" value="10000" />
-		<property name="maxStatements" value="0" />
-		<!--初始化时获取三个连接，取值应在minPoolSize与maxPoolSize之间。 Default: 3 -->
-		<property name="initialPoolSize" value="3" />
-		<!-- 最小连接数 -->
-		<property name="minPoolSize" value="2" />
-		<!--连接池中保留的最大连接数。Default: 15 -->
-		<property name="maxPoolSize" value="10" />
-		<!--最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
-		<property name="maxIdleTime" value="60" />
-		<!--How long to hang on to excess unused connections after traffic spike -->
-		<property name="maxIdleTimeExcessConnections" value="600" />
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxActive" value="50" />
+		<property name="maxIdle" value="10" />
+		<property name="maxWait" value="1000" />
+		<property name="testOnBorrow" value="true" />
 	</bean>
 
-	<bean id="sendCloudDataSource" parent="C3P0DataSourceFather">
-		<!-- <property name="jdbcUrl" value="jdbc:mysql://192.168.133.173/sendcloud?useUnicode=true&amp;characterEncoding=utf8" 
-			/> <property name="user" value="sendcloud" /> <property name="password" value="A9499297" 
-			/> -->
-		<property name="jdbcUrl"
-			value="jdbc:mysql://10.10.58.12/sendcloud?useUnicode=true&amp;characterEncoding=utf8" />
-		<property name="user" value="sendcloud" />
-		<property name="password" value="GBDgo77" />
+	<bean id="jedis.shardInfo" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" value="69.85.92.97" />
+		<constructor-arg index="1" value="6379" />
+		<property name="password" value="199111@0Smy" />
 	</bean>
 
-	<bean id="sbfblDataSource" parent="C3P0DataSourceFather">
-		<!-- <property name="jdbcUrl" value="jdbc:mysql://192.168.133.173/sendcloud?useUnicode=true&amp;characterEncoding=utf8" 
-			/> <property name="user" value="sendcloud" /> <property name="password" value="A9499297" 
-			/> -->
-		<property name="jdbcUrl"
-			value="jdbc:mysql://192.168.133.173/sendcloud?useUnicode=true&amp;characterEncoding=utf8" />
-		<property name="user" value="sendcloud" />
-		<property name="password" value="A9499297" />
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1">
+			<list>
+				<ref bean="jedis.shardInfo" />
+			</list>
+		</constructor-arg>
 	</bean>
-
-	<!-- <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
-		<property name="dataSource" ref="${sendCloudDataSource}" /> </bean> <tx:advice 
-		id="txAdvice" transaction-manager="txManager"> <tx:attributes> <tx:method 
-		name="get*" propagation="REQUIRED" read-only="true" /> <tx:method name="load*" 
-		propagation="REQUIRED" read-only="true" /> <tx:method name="list*" propagation="REQUIRED" 
-		read-only="true" /> <tx:method name="*" propagation="REQUIRED" /> </tx:attributes> 
-		</tx:advice> <aop:config> <aop:pointcut id="lobbyTaskUserServiceOperation" 
-		expression="execution(* com.sohu.sendCloud.service.*(..))" /> <aop:advisor 
-		advice-ref="txAdvice" pointcut-ref="lobbyTaskUserServiceOperation" /> </aop:config> -->
-
-	<!-- <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"> 
-		<property name="maxActive" value="1000" /> <property name="maxIdle" value="100" 
-		/> <property name="maxWait" value="100" /> <property name="testOnBorrow" 
-		value="true" /> </bean> -->
-
-	<!-- jedis的配置 <bean id="jedis.shardInfo" class="redis.clients.jedis.JedisShardInfo"> 
-		<constructor-arg index="0" value="10.10.125.66" /> <constructor-arg index="1" 
-		value="6379" /> </bean> <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool"> 
-		<constructor-arg index="0" ref="jedisPoolConfig" /> <constructor-arg index="1"> 
-		<list> <ref bean="jedis.shardInfo" /> </list> </constructor-arg> </bean> -->
-
-	<!-- <bean id="redisConnectionPool" class="redis.clients.jedis.JedisPool" 
-		destroy-method="destroy"> <constructor-arg index="0" ref="jedisPoolConfig" 
-		/> <constructor-arg index="1" value="10.10.125.66" /> <constructor-arg index="2" 
-		value="6379" /> </bean> -->
-
 
 </beans>

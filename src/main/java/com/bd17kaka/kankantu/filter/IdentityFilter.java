@@ -15,11 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
  * 身份验证filter
- * 
  * @author bd17kaka
- * 
  */
 public class IdentityFilter implements Filter {
 
@@ -43,7 +40,9 @@ public class IdentityFilter implements Filter {
 		String srcUrl = req.getRequestURL().toString();
 		String[] tokens = srcUrl.split("/");
 		String url = tokens[tokens.length - 1];
-		if (url.equals("index.jsp")) {
+		if (url.equals("index.jsp") ||
+				url.equals("signup.jsp") ||
+				url.equals("signup.do")) {
 			chain.doFilter(req, resp);
 
 		}else if(url.equals("login.do")){

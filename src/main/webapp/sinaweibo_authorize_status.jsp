@@ -40,16 +40,36 @@
   <body>
 
  	<jsp:include page="head.jsp">
-       	<jsp:param value="main" name="flag"/>
+ 		<jsp:param value="sinaweibo" name="flag"/>
  	</jsp:include>
-
+ 	
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span3">
-         
+         <jsp:include page="sinaweibo_left.jsp"></jsp:include>
         </div><!--/span-->
         <div class="span9">
-          	首页
+          <div class="hero-unit">
+            <h1>新浪微博</h1>
+            <p>授权到新浪微博后，可以二次定制你的新浪微博内容，定向关注收藏微博内容，还可以定制自动转发的功能！</p>
+            <p><a class="btn btn-primary btn-large" href="/openOathPage.do">授权去咯 &raquo;</a></p>
+          </div>
+          <div class="row-fluid">
+            <div class="span12">
+              
+              <c:if test="${token ne null}">
+              	<h3>授权状态:<span class="label label-success">授权有效</span></h3>
+              	<h3>token:<span class="label label-success">${token.token }</span></h3>
+              	<h3>失效时间:<span class="label label-success">${token.expire }</span></h3>
+              </c:if>
+              <c:if test="${token eq null}">
+              	<h3>授权状态:<span class="label label-important">未授权或授权超时</span></h3>
+              </c:if>
+              
+              
+              <p><a class="btn" href="#">查看详细授权信息 &raquo;</a></p>
+            </div><!--/span-->
+          </div><!--/row-->
         </div><!--/span-->
       </div><!--/row-->
 

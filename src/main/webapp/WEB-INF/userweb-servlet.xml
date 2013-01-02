@@ -7,8 +7,8 @@
 				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 	<context:component-scan base-package="com.bd17kaka.kankantu.controller" />
-	<context:component-scan base-package="com.bd17kaka.kankantu.api" />
-	<context:component-scan base-package="com.bd17kaka.kankantu.reputation" />
+	<context:component-scan base-package="com.bd17kaka.kankantu.service" />
+	<context:component-scan base-package="com.bd17kaka.kankantu.dao" />
 
 	<!-- 拦截器配置 <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"> 
 		<property name="interceptors"> <list> <ref bean="identityInterceptor" /> 
