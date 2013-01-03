@@ -93,6 +93,5 @@ public class SinaWeiboOauthContoller extends BaseController {
 			request.setAttribute("token", token);
 		}
 		return "sinaweibo_authorize_status";
-		
 	}
 }
