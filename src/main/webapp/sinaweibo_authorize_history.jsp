@@ -6,7 +6,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>主页-kankantu</title>
+    <title>授权历史-kankantu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -48,28 +48,31 @@
         <div class="span3">
          <jsp:include page="sinaweibo_left.jsp"></jsp:include>
         </div><!--/span-->
-        <div class="span9">
-          <div class="hero-unit">
-            <h2>新浪微博</h2>
-            <p>授权到新浪微博后，我们可以二次定制你的以及你所关注的人的新浪微博内容，定向关注收藏微博内容，还可以定制自动转发的功能！</p>
-            <p><a class="btn btn-primary btn-large" href="/openOathPage.do">授权去咯 &raquo;</a></p>
-          </div>
-          <div class="row-fluid">
-            <div class="span12">
-              
-              <c:if test="${token ne null}">
-              	<h4>授权状态：<span class="label">授权有效</span></h4>
-              	<h4>token：<span class="label">${token.token }</span></h4>
-              	<h4>失效时间：<span class="label">${hour}小时${minute}分钟${second}秒&nbsp;后过期</span></h4>
-              </c:if>
-              <c:if test="${token eq null}">
-              	<h4>授权状态：<span class="label label-important">未授权或授权超时</span></h4>
-              </c:if>
-              <p><a class="btn" href="listSinaWeiboAuthorize.do">查看详细授权信息 &raquo;</a></p>
-            </div><!--/span-->
-          </div><!--/row-->
-        </div><!--/span-->
-      </div><!--/row-->
+			<div class="span9">
+				<table class="table table-bordered">
+					<%-- <caption>您的历史授权记录</caption> --%>
+					<thead>
+						<tr>
+							<th>时间戳</th>
+							<th>token</th>
+							<th>微博用户名称</th>
+						</tr>
+					</thead>
+					<c:if test="${list ne null}">
+						<tbody>
+							<c:forEach var="item" items="${list}">
+								<tr>
+									<td>${item.date}</td>
+									<td>${item.token}</td>
+									<td>${item.userName}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</c:if>
+				</table>
+			</div>
+			<!--/span-->
+		</div><!--/row-->
 
       <hr>
 

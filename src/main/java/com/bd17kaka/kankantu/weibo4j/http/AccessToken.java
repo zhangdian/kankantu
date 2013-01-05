@@ -94,10 +94,9 @@ public class AccessToken extends WeiboResponse implements Serializable {
 	}
 
 
-
-
-
-
-
-
+	///////////////////////////////////////////////////////////////////////////
+	// add by zhangdian
+	public String getUid() {
+		return uid;
+	}
 }

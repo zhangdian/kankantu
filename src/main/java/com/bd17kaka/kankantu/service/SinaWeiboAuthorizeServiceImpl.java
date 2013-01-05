@@ -3,6 +3,7 @@ package com.bd17kaka.kankantu.service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -14,7 +15,9 @@ import com.bd17kaka.kankantu.exception.StoreTokenException;
 import com.bd17kaka.kankantu.po.SinaWeiboAuthorizeInfo;
 import com.bd17kaka.kankantu.po.Token;
 import com.bd17kaka.kankantu.weibo4j.Oauth;
+import com.bd17kaka.kankantu.weibo4j.Users;
 import com.bd17kaka.kankantu.weibo4j.http.AccessToken;
+import com.bd17kaka.kankantu.weibo4j.model.User;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
 
 @Service(value = "sinaWeiboAuthorizeService")
@@ -38,8 +41,13 @@ public class SinaWeiboAuthorizeServiceImpl implements SinaWeiboAuthorizeService 
 		Date date = new Date();
 		DateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String time = formater.format(date);
+		// 获取用户微博的信息
+		String uid = token.getUid();
+		Users users = new Users();
+		users.setToken(token.getAccessToken());
+		User user = users.showUserById(uid);
 		// 保存授权信息
-		SinaWeiboAuthorizeInfo info = new SinaWeiboAuthorizeInfo(Integer.parseInt(userId), "", token.getAccessToken(), time);
+		SinaWeiboAuthorizeInfo info = new SinaWeiboAuthorizeInfo(Integer.parseInt(userId), user.getScreenName(), token.getAccessToken(), time);
 		if (sinaWeiboAuthorizeDao.insert(info, userId) <= 0) {
 			throw new StoreTokenException(time);
 		}
@@ -50,5 +58,10 @@ public class SinaWeiboAuthorizeServiceImpl implements SinaWeiboAuthorizeService 
 	@Override
 	public Token getTokenByUserId(String userId) {
 		return sinaWeiboTokenDao.get(userId);
+	}
+
+	@Override
+	public List<SinaWeiboAuthorizeInfo> list(String userId) {
+		return sinaWeiboAuthorizeDao.list(userId);
 	}
 }

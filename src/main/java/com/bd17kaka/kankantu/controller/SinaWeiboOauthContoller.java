@@ -1,6 +1,7 @@
 package com.bd17kaka.kankantu.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -12,14 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bd17kaka.kankantu.exception.StoreTokenException;
+import com.bd17kaka.kankantu.po.SinaWeiboAuthorizeInfo;
 import com.bd17kaka.kankantu.po.Token;
 import com.bd17kaka.kankantu.service.SinaWeiboAuthorizeService;
-import com.bd17kaka.kankantu.service.WeiboService;
-import com.bd17kaka.kankantu.utils.RedisUtils;
 import com.bd17kaka.kankantu.weibo4j.Oauth;
-import com.bd17kaka.kankantu.weibo4j.http.AccessToken;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
-import com.bd17kaka.kankantu.weibo4j.util.BareBonesBrowserLaunch;
 
 /**
  * @author bd17kaka
@@ -91,7 +89,33 @@ public class SinaWeiboOauthContoller extends BaseController {
 		Token token = sinaWeiboAuthorizeService.getTokenByUserId(userId);
 		if (null != token) {
 			request.setAttribute("token", token);
+			int hour = Integer.parseInt(token.getExpire()) / 3600;
+			request.setAttribute("hour", hour);
+			int minute = Integer.parseInt(token.getExpire()) % 3600 / 60;
+			request.setAttribute("minute", minute);
+			int second = Integer.parseInt(token.getExpire()) % 3600 % 60;
+			request.setAttribute("second", second);
 		}
 		return "sinaweibo_authorize_status";
+	}
+	
+	/**
+	 * 获取当前用户的验证状态
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 * @throws WeiboException
+	 */
+	@RequestMapping("/listSinaWeiboAuthorize.do")
+	public String listSinaWeiboAuthorize(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+		Object userId = request.getSession().getAttribute("kankantu_userid");
+		if (null == userId) {
+			return "index";
+		}
+		List<SinaWeiboAuthorizeInfo> list = sinaWeiboAuthorizeService.list(userId.toString());
+		System.out.println(list.size());
+		request.setAttribute("list", list);
+		return "sinaweibo_authorize_history";
 	}
 }
