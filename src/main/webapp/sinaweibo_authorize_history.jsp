@@ -46,7 +46,9 @@
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span3">
-         <jsp:include page="sinaweibo_left.jsp"></jsp:include>
+         <jsp:include page="sinaweibo_left.jsp">
+         	<jsp:param value="authorize_history" name="flag"/>
+         </jsp:include>
         </div><!--/span-->
 			<div class="span9">
 				<table class="table table-bordered">
