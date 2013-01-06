@@ -26,6 +26,7 @@ public class SinaWeiboAuthorizeDaoImpl extends RedisUtils implements SinaWeiboAu
 		// 获取一个authorizeid
 		Long id = jedis.incr(keyPrefix + "maxid");
 		if (id <= 0L) {
+			returnConnection(jedis);
 			return id;
 		}
 		// 将授权信息的各个部分保存起来
@@ -35,6 +36,7 @@ public class SinaWeiboAuthorizeDaoImpl extends RedisUtils implements SinaWeiboAu
 		jedis.set(keyPrefix + id + ":token", info.getToken());
 		// 将授权id保存到授权id列表中
 		jedis.lpush(keyPrefix + "authorizeids", id.toString());
+		returnConnection(jedis);
 		return id;
 	}
 
@@ -46,6 +48,7 @@ public class SinaWeiboAuthorizeDaoImpl extends RedisUtils implements SinaWeiboAu
 		// 获取所有授权记录的id列表
 		List<String> ids = jedis.lrange(keyPrefix + "authorizeids", 0, -1);
 		if (null == ids) {
+			returnConnection(jedis);
 			return null;
 		}
 		// 瓶装所有记录
@@ -59,6 +62,7 @@ public class SinaWeiboAuthorizeDaoImpl extends RedisUtils implements SinaWeiboAu
 			info.setUserName(jedis.get(keyPrefix + "weibousername"));
 			list.add(info);
 		}
+		returnConnection(jedis);
 		return list;
 	}
 }

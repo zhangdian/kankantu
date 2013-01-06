@@ -16,10 +16,13 @@ public class RedisUtils {
 	protected ShardedJedisPool shardedJedisPool;
 
 	public ShardedJedis getConnection() {
-		System.out.println(shardedJedisPool.toString());
 		return shardedJedisPool.getResource();
 	}
 
+	public void returnConnection(ShardedJedis resource) {
+		shardedJedisPool.returnResource(resource);
+	}
+	
 	private Random random = new Random();
 
 	public String getRandomIP() {

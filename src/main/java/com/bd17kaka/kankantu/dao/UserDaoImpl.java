@@ -21,6 +21,7 @@ public class UserDaoImpl extends RedisUtils implements UserDao {
 		Long id = jedis.incr(prefix + "maxid");
 		// 插入用户的信息，id，username，password，email
 		if (id < 0L) {
+			returnConnection(jedis);
 			return id;
 		}
 		// 添加用户各个字段的信息
@@ -35,13 +36,16 @@ public class UserDaoImpl extends RedisUtils implements UserDao {
 		jedis.sadd(prefix + "userids", id.toString());
 		jedis.sadd(prefix + "usernames", user.getUserName());
 		
+		returnConnection(jedis);
 		return id;
 	}
 	@Override
 	public boolean hasUserName(String userName) {
 		ShardedJedis jedis =  getConnection(); 
 		String key = prefix + "usernames";
-		return jedis.sismember(key, userName);
+		boolean flag = jedis.sismember(key, userName);
+		returnConnection(jedis);
+		return flag;
 	}
 	@Override
 	public User hasUser(User user) {
@@ -57,12 +61,14 @@ public class UserDaoImpl extends RedisUtils implements UserDao {
 		key = prefix + userId + ":password";
 		String password = jedis.get(key);
 		if (!password.equals(user.getPassword())) {
+			returnConnection(jedis);
 			return null;
 		}
 		// 获取用户其他信息，比如email
 		key = prefix + userId + ":email";
 		String email = jedis.get(key);
 		
+		returnConnection(jedis);
 		return new User(Integer.parseInt(userId), user.getUserName(), "", email);
 	}
 }

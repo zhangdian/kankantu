@@ -21,6 +21,7 @@ public class SinaWeiboTokenDaoImpl extends RedisUtils implements SinaWeiboTokenD
 		String key = prefix + userId + ":token";
 		jedis.set(key, token);
 		jedis.expire(key, 3600 * 6);
+		returnConnection(jedis);
 	}
 
 	@Override
@@ -34,15 +35,18 @@ public class SinaWeiboTokenDaoImpl extends RedisUtils implements SinaWeiboTokenD
 		String key = prefix + userId + ":token";
 		String token = jedis.get(key);
 		if (null == token) {
+			returnConnection(jedis);
 			return null;
 		}
 		t.setToken(token);
 		// 获取生命周期
 		Long expire = jedis.ttl(key);
 		if (0L > expire) {
+			returnConnection(jedis);
 			return null;
 		}
 		t.setExpire(expire.toString());
+		returnConnection(jedis);
 		return t;
 	}
 }
