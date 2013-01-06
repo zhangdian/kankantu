@@ -47,12 +47,13 @@ public class SinaWeiboAuthorizeServiceImpl implements SinaWeiboAuthorizeService 
 		users.setToken(token.getAccessToken());
 		User user = users.showUserById(uid);
 		// 保存授权信息
-		SinaWeiboAuthorizeInfo info = new SinaWeiboAuthorizeInfo(Integer.parseInt(userId), user.getScreenName(), token.getAccessToken(), time);
+		SinaWeiboAuthorizeInfo info = new SinaWeiboAuthorizeInfo(Integer.parseInt(uid), user.getScreenName(), token.getAccessToken(), time);
 		if (sinaWeiboAuthorizeDao.insert(info, userId) <= 0) {
 			throw new StoreTokenException(time);
 		}
 		// 保存token到最新的token
-		sinaWeiboTokenDao.insert(token.getAccessToken(), userId);
+		Token t = new Token(uid, user.getScreenName(), token.getAccessToken(), "0");
+		sinaWeiboTokenDao.insert(t, userId);
 	}
 
 	@Override

@@ -6,7 +6,9 @@ package com.bd17kaka.kankantu.po;
 public class Token implements java.io.Serializable {
 	private static final long serialVersionUID = -1744081377872974319L;
 
+	// sinaweibo里的 userid和username
 	private String userId;
+	private String userName;
 	private String token;
 	private String expire;
 
@@ -15,11 +17,20 @@ public class Token implements java.io.Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Token(String userId, String token, String expire) {
+	public Token(String userId, String userName, String token, String expire) {
 		super();
 		this.userId = userId;
+		this.userName = userName;
 		this.token = token;
 		this.expire = expire;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getUserId() {
@@ -48,7 +59,7 @@ public class Token implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "Token [userId=" + userId + ", token=" + token + ", expire="
-				+ expire + "]";
+		return "Token [userId=" + userId + ", userName=" + userName
+				+ ", token=" + token + ", expire=" + expire + "]";
 	}
 }

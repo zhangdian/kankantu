@@ -91,7 +91,7 @@ body {
 			<input type="password" class="input-block-level" placeholder="确认密码" id="re_password" name="re_password">
 			<!-- <label class="checkbox"> <input type="checkbox" value="remember-me">Remember me</label> -->
 			<label class="checkbox">${msg}</label>
-			<button class="btn btn-large btn-primary" type="submit">注册</button>
+			<button class="btn btn-large btn-primary" type="submit">注册</button>&nbsp;&nbsp;<a href="index.jsp">已有账号？</a>
 		</form>
 
 	</div>

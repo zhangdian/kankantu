@@ -8,11 +8,11 @@ import java.util.Date;
 public class SinaWeiboAuthorizeInfo implements java.io.Serializable {
 	private static final long serialVersionUID = -1744081377872974319L;
 	/**
-	 * 用户id
+	 * 用户id，微博里的id
 	 */
 	private int userId;
 	/**
-	 * 用户名称
+	 * 用户名称,微博名字
 	 */
 	private String userName;
 	/**

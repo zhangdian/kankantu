@@ -59,6 +59,7 @@
               
               <c:if test="${token ne null}">
               	<h4>授权状态：<span class="label">授权有效</span></h4>
+              	<h4>微博名称：<span class="label">${token.userName}</span></h4>
               	<h4>token：<span class="label">${token.token }</span></h4>
               	<h4>失效时间：<span class="label">${hour}小时${minute}分钟${second}秒&nbsp;后过期</span></h4>
               </c:if>

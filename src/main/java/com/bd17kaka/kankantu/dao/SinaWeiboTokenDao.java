@@ -8,7 +8,8 @@ import com.bd17kaka.kankantu.po.Token;
  * @author bd17kaka
  */
 public interface SinaWeiboTokenDao {
-	void insert(String token, String userId);
+	
+	void insert(Token t, String userId);
 	
 	Token get(String userId);
 }
