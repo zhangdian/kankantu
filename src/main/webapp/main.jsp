@@ -44,24 +44,64 @@
        	<jsp:param value="main" name="flag"/>
  	</jsp:include>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
+    <div class="container">
+      <div class="row">
+        <div class="span4">
          
         </div><!--/span-->
-        <div class="span9">
-			首页
-			<div id="myCarousel" class="carousel slide">
-  <!-- Carousel items -->
-  <div class="carousel-inner">
-    <div class="item active">111111</div>
-    <div class="item">2222</div>
-    <div class="item">3333</div>
-  </div>
-  <!-- Carousel nav -->
-  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-</div>
+        <div class="span8">
+			<!-- 首页
+			 <div class="bs-docs-example">
+              <div id="myCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                  <div class="item active">
+                    <img src="images/2.jpg" alt="">
+                    <div class="carousel-caption">
+                      <h4>图片1</h4>
+                      <p>图片1</p>
+   	 				</div>
+                  </div>
+                  <div class="item">
+                    <img src="images/2.jpg" alt="">
+                    <div class="carousel-caption">   
+                 	  	<h4>图片2</h4>
+                      	<p>图片2</p>
+                    </div>
+                  </div>
+                </div>
+				 <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+              </div>
+            </div> -->
+            <div class="bs-docs-example">
+              <div id="myCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                  <div class="item active">
+                    <img src="images/1.jpg" alt="">
+                    <div class="carousel-caption">
+                      <h4>图片1</h4>
+                      <p>图片1</p>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="images/2.jpg" alt="">
+                    <div class="carousel-caption">
+                      <h4>图片2</h4>
+                      <p>图片2</p>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="images/3.jpg" alt="">
+                    <div class="carousel-caption">
+                      <h4>图片3</h4>
+                      <p>图片3</p>
+                    </div>
+                  </div>
+                </div>
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+              </div>
+            </div>
 		</div>
       </div><!--/row-->
       <hr>
@@ -75,18 +115,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="style/js/jquery.js"></script>
-    <script src="style/js/bootstrap-transition.js"></script>
-    <script src="style/js/bootstrap-alert.js"></script>
-    <script src="style/js/bootstrap-modal.js"></script>
-    <script src="style/js/bootstrap-dropdown.js"></script>
-    <script src="style/js/bootstrap-scrollspy.js"></script>
-    <script src="style/js/bootstrap-tab.js"></script>
-    <script src="style/js/bootstrap-tooltip.js"></script>
-    <script src="style/js/bootstrap-popover.js"></script>
-    <script src="style/js/bootstrap-button.js"></script>
-    <script src="style/js/bootstrap-collapse.js"></script>
-    <script src="style/js/bootstrap-carousel.js"></script>
-    <script src="style/js/bootstrap-typeahead.js"></script>
-    
+    <script src="style/js/bootstrap.min.js"></script>
   </body>
 </html>
