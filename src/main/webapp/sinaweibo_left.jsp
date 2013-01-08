@@ -10,9 +10,8 @@ String flag = request.getParameter("flag");
 		<li class="nav-header">账户信息</li>
 		<li <%if("authorize_status".equals(flag)) {%> class="active" <% }%>><a href="sinaWeiboAuthorizeStatus.do">授权状态</a></li>
 		<li <%if("authorize_history".equals(flag)) {%> class="active" <% }%>><a href="listSinaWeiboAuthorize.do">授权历史</a></li>
-		<li <%if("main".equals(flag)) {%> class="active" <% }%>><a href="#">Link</a></li>
-		<li class="nav-header">Sidebar</li>
-		<li <%if("main".equals(flag)) {%> class="active" <% }%>><a href="#">Link</a></li>
+		<li class="nav-header">微博信息</li>
+		<li <%if("groups".equals(flag)) {%> class="active" <% }%>><a href="sinaweibo_groups.jsp">好友分组</a></li>
 		<li <%if("main".equals(flag)) {%> class="active" <% }%>><a href="#">Link</a></li>
 		<li <%if("main".equals(flag)) {%> class="active" <% }%>><a href="#">Link</a></li>
 	</ul>

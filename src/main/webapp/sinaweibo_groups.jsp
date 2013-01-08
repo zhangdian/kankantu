@@ -6,7 +6,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>主页-kankantu</title>
+    <title>好友分组-kankantu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -41,32 +41,53 @@
   <body>
 
  	<jsp:include page="head.jsp">
-       	<jsp:param value="main" name="flag"/>
+ 		<jsp:param value="sinaweibo" name="flag"/>
  	</jsp:include>
-
+ 	
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span3">
-         
+         <jsp:include page="sinaweibo_left.jsp">
+         	<jsp:param value="groups" name="flag"/>
+         </jsp:include>
         </div><!--/span-->
-        <div class="span9">
-			首页
-			<div id="myCarousel" class="carousel slide">
-  <!-- Carousel items -->
-  <div class="carousel-inner">
-    <div class="item active">111111</div>
-    <div class="item">2222</div>
-    <div class="item">3333</div>
-  </div>
-  <!-- Carousel nav -->
-  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-</div>
-		</div>
-      </div><!--/row-->
+			<div class="span9">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#">卡卡</a></li>
+					<li><a href="#">ac米兰.</a></li>
+					<li><a href="#">足球</a></li>
+				</ul>
+				<table class="table table-bordered">
+					<%-- <caption>您的历史授权记录</caption> --%>
+					<thead>
+						<tr>
+							<th>时间戳</th>
+							<th>token</th>
+							<th>微博用户名称</th>
+						</tr>
+					</thead>
+					<c:if test="${list ne null}">
+						<tbody>
+							<c:forEach var="item" items="${list}">
+								<tr>
+									<td>${item.date}</td>
+									<td>${item.token}</td>
+									<td>${item.userName}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</c:if>
+				</table>
+				<button type="button" class="btn btn-primary" data-toggle="button">同步该组</button>
+				<button type="button" class="btn btn-primary" data-toggle="button">同步所有</button>
+			</div>
+			<!--/span-->
+		</div><!--/row-->
+
       <hr>
+
       <footer>
-        <p>&copy; kankantu 2012</p>	
+        <p>&copy; kankantu 2012</p>
       </footer>
 
     </div><!--/.fluid-container-->
@@ -87,6 +108,6 @@
     <script src="style/js/bootstrap-collapse.js"></script>
     <script src="style/js/bootstrap-carousel.js"></script>
     <script src="style/js/bootstrap-typeahead.js"></script>
-    
+
   </body>
 </html>
