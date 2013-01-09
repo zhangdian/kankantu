@@ -43,14 +43,14 @@
  		<jsp:param value="sinaweibo" name="flag"/>
  	</jsp:include>
  	
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
+    <div class="container">
+      <div class="row">
+        <div class="span2">
          <jsp:include page="sinaweibo_left.jsp">
          	<jsp:param value="authorize_history" name="flag"/>
          </jsp:include>
         </div><!--/span-->
-			<div class="span9">
+			<div class="span10">
 				<table class="table table-bordered">
 					<%-- <caption>您的历史授权记录</caption> --%>
 					<thead>

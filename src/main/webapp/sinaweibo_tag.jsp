@@ -44,14 +44,14 @@
  		<jsp:param value="sinaweibo" name="flag"/>
  	</jsp:include>
  	
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
+    <div class="container">
+      <div class="row">
+        <div class="span2">
          <jsp:include page="sinaweibo_left.jsp">
          	<jsp:param value="tag" name="flag"/>
          </jsp:include>
         </div><!--/span-->
-			<div class="span9">
+			<div class="span10">
 				<c:if test="${list ne null }">
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#">ALL</a></li>

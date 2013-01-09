@@ -43,14 +43,14 @@
  		<jsp:param value="sinaweibo" name="flag"/>
  	</jsp:include>
  	
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
+    <div class="container">
+      <div class="row">
+        <div class="span2">
          <jsp:include page="sinaweibo_left.jsp">
          	<jsp:param value="authorize_status" name="flag"/>
          </jsp:include>
         </div><!--/span-->
-        <div class="span9">
+        <div class="span10">
           <div class="hero-unit">
             <h2>新浪微博</h2>
             <p>授权到新浪微博后，我们可以二次定制你的以及你所关注的人的新浪微博内容，定向关注收藏微博内容，还可以定制自动转发的功能！</p>
