@@ -46,10 +46,10 @@
 
     <div class="container">
       <div class="row">
-        <div class="span4">
+        <div class="span3">
          
         </div><!--/span-->
-        <div class="span8">
+        <div class="span9">
 			<!-- 首页
 			 <div class="bs-docs-example">
               <div id="myCarousel" class="carousel slide">
@@ -77,14 +77,14 @@
               <div id="myCarousel" class="carousel slide">
                 <div class="carousel-inner">
                   <div class="item active">
-                    <img src="images/1.jpg" alt="">
+                    <img src="images/3.jpg" alt="">
                     <div class="carousel-caption">
                       <h4>图片1</h4>
                       <p>图片1</p>
                     </div>
                   </div>
                   <div class="item">
-                    <img src="images/2.jpg" alt="">
+                    <img src="images/3.jpg" alt="">
                     <div class="carousel-caption">
                       <h4>图片2</h4>
                       <p>图片2</p>
