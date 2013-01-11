@@ -52,15 +52,27 @@
          </jsp:include>
         </div><!--/span-->
 			<div class="span10">
-				<c:if test="${list ne null }">
+				<c:if test="${list_tag ne null }">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#">ALL</a></li>
-						<c:forEach var="item" items="${list}">
-							<li><a href="#">${item.tagName}</a></li>
+						<li <c:if test="${cur_tag eq \"all\" }">class="active"</c:if> ><a href="listRecommendUser.do" >ALL</a></li>
+						<c:forEach var="tag" items="${list_tag}">
+							<li <c:if test="${cur_tag eq tag.tagName}">class="active"</c:if> ><a href="listRecommendUser.do?tag_name=${tag.tagName}" >${tag.tagName} </a></li>
 						</c:forEach>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">more<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#dropdown1">推荐用户</a></li>
+								<li><a href="#dropdown2">该组用户</a></li>
+								<li><a href="#dropdown2">该组微博</a></li>
+							</ul>
+						</li>
 					</ul>
 				</c:if>
-			
+				<c:if test="${list_recommend_user ne null}">
+					<c:forEach var="user" items="${list_recommend_user}">
+						<img src="${user.profileImageURL}" />
+					</c:forEach>
+				</c:if>
 <!-- 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#">卡卡</a></li>
 					<li><a href="#">ac米兰.</a></li>

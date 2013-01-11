@@ -15,11 +15,11 @@ import com.bd17kaka.kankantu.weibo4j.model.Tag;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
 
 /**
- * 队列信息DAO实现
+ * 用户taginfo信息DAO实现
  * @author bd17kaka
  */
 @Repository(value="sinaWeiboTagDao")
-public class SinaWeiboTagImpl extends RedisUtils implements SinaWeiboTagDao {
+public class SinaWeiboTagDaoImpl extends RedisUtils implements SinaWeiboTagDao {
 
 	private static String prefix = "sinaweibo:tag:";
 
@@ -80,5 +80,11 @@ public class SinaWeiboTagImpl extends RedisUtils implements SinaWeiboTagDao {
 		}
 		returnConnection(jedis);
 		return list;
+	}
+
+	@Override
+	public TagInfo get(String tagName) {
+		// 暂时只有一个tagName字段
+		return new TagInfo(tagName);
 	}
 }

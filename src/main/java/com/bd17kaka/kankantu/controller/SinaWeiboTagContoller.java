@@ -57,7 +57,8 @@ public class SinaWeiboTagContoller extends BaseController {
 	public String listSinaWeiboTag(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
 		String userId = request.getSession().getAttribute("kankantu_userid").toString();
 		List<TagInfo> list = sinaWeiboTagService.list(userId);
-		request.setAttribute("list", list);
+		request.setAttribute("list_tag", list);
+		request.setAttribute("cur_tag", "all");
 		return "sinaweibo_tag";
 	}
 }

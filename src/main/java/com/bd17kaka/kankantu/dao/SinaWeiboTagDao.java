@@ -24,8 +24,24 @@ public interface SinaWeiboTagDao {
 	
 	///////////////////////////////////////////////////////////////////////////
 	// redis中tag信息操作
+	/**
+	 * 将某用户在sina微博中的tag列表插入到我们的数据库
+	 * @param listTagInfo
+	 * @param userId
+	 */
 	void insert(List<TagInfo> listTagInfo, String userId);
 	
-	// 获取用户当前的所有tag信息
+	/**
+	 * 列出用户所有的tag
+	 * @param userId
+	 * @return
+	 */
 	List<TagInfo> list(String userId);
+	
+	/**
+	 * 根据指定的tag名称获取TagInfo对象
+	 * @param tagName
+	 * @return
+	 */
+	TagInfo get(String tagName);
 }
