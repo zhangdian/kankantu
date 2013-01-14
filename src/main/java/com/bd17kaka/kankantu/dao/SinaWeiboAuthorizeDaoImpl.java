@@ -58,7 +58,7 @@ public class SinaWeiboAuthorizeDaoImpl extends RedisUtils implements SinaWeiboAu
 			SinaWeiboAuthorizeInfo info = new SinaWeiboAuthorizeInfo();
 			info.setDate(jedis.get(keyPrefix + "timestamp"));
 			info.setToken(jedis.get(keyPrefix + "token"));
-			info.setUserId(Integer.parseInt(jedis.get(keyPrefix + "weibouserid")));
+			info.setUserId(jedis.get(keyPrefix + "weibouserid"));
 			info.setUserName(jedis.get(keyPrefix + "weibousername"));
 			list.add(info);
 		}

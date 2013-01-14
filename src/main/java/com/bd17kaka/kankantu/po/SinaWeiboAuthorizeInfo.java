@@ -10,7 +10,7 @@ public class SinaWeiboAuthorizeInfo implements java.io.Serializable {
 	/**
 	 * 用户id，微博里的id
 	 */
-	private int userId;
+	private String userId;
 	/**
 	 * 用户名称,微博名字
 	 */
@@ -30,7 +30,7 @@ public class SinaWeiboAuthorizeInfo implements java.io.Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SinaWeiboAuthorizeInfo(int userId, String userName, String token, String date) {
+	public SinaWeiboAuthorizeInfo(String userId, String userName, String token, String date) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -38,11 +38,11 @@ public class SinaWeiboAuthorizeInfo implements java.io.Serializable {
 		this.date = date;
 	}
 
-	public int getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
