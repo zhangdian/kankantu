@@ -44,70 +44,87 @@
  		<jsp:param value="sinaweibo" name="flag"/>
  	</jsp:include>
  	
-    <div class="container">
-      <div class="row">
+    <div class="container-fluid">
+      <div class="row-fluid">
         <div class="span2">
          <jsp:include page="sinaweibo_left.jsp">
          	<jsp:param value="tag" name="flag"/>
          </jsp:include>
         </div><!--/span-->
 			<div class="span10">
-				<c:if test="${list_tag ne null }">
-					<ul class="nav nav-tabs">
-						<li <c:if test="${cur_tag eq \"all\" }">class="active"</c:if> ><a href="listRecommendUser.do" >ALL</a></li>
-						<c:forEach var="tag" items="${list_tag}">
-							<li <c:if test="${cur_tag eq tag.tagName}">class="active"</c:if> ><a href="listRecommendUser.do?tag_name=${tag.tagName}" >${tag.tagName} </a></li>
-						</c:forEach>
-						<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">more<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="#dropdown1">推荐用户</a></li>
-								<li><a href="#dropdown2">该组用户</a></li>
-								<li><a href="#dropdown2">该组微博</a></li>
-							</ul>
-						</li>
-					</ul>
-				</c:if>
-				<c:if test="${list_recommend_user ne null}">
-					<ul class="thumbnails">
-						<c:forEach var="user" items="${list_recommend_user}">
-								<li class="span2">
-									<a href="#" class="thumbnail"> 
-										<img src="${user.profileImageURL}" alt="">
-									</a>
-									<h5>${user.userName}</h5>
-      								<p>${user.followCount}</p>
-								</li>
-						</c:forEach>
-					</ul>
-				</c:if>
-<!-- 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#">卡卡</a></li>
-					<li><a href="#">ac米兰.</a></li>
-					<li><a href="#">足球</a></li>
-				</ul> -->
-<%-- 				<table class="table table-bordered">
-					<caption>您的历史授权记录</caption>
-					<thead>
-						<tr>
-							<th>时间戳</th>
-							<th>token</th>
-							<th>微博用户名称</th>
-						</tr>
-					</thead>
-					<c:if test="${list ne null}">
-						<tbody>
-							<c:forEach var="item" items="${list}">
-								<tr>
-									<td>${item.date}</td>
-									<td>${item.token}</td>
-									<td>${item.userName}</td>
-								</tr>
+					<div class="row-fluid">
+					<c:if test="${list_tag ne null }">
+						<ul class="nav nav-tabs">
+							<li <c:if test="${cur_tag eq \"all\" }">class="active"</c:if> ><a href="listRecommendUser.do" >ALL</a></li>
+							<c:forEach var="tag" items="${list_tag}">
+								<li <c:if test="${cur_tag eq tag.tagName}">class="active"</c:if> ><a href="listRecommendUser.do?tag_name=${tag.tagName}" >${tag.tagName} </a></li>
 							</c:forEach>
-						</tbody>
+							<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">more<b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="#dropdown1">推荐用户</a></li>
+									<li><a href="#dropdown2">该组用户</a></li>
+									<li><a href="#dropdown2">该组微博</a></li>
+								</ul>
+							</li>
+						</ul>
 					</c:if>
-				</table> --%>
-				<button id="sync" name="sync" type="button" class="btn btn-primary" data-toggle="button" onclick="syncSinaWeiboTag.do" >同步Tags</button>
+					<c:if test="${list_recommend_user ne null}">
+						<ul class="thumbnails">
+							<c:forEach var="user" items="${list_recommend_user}">
+									<li class="span2">
+										<div class="thumbnail">
+											<a href="#"> 
+												<img src="${user.profileImageURL}" alt="">
+											</a>
+											<div class="caption">
+												<h5>${user.userName}</h5>
+			      								<p>${user.followCount}粉丝</p>
+			      								<p><a href="#" class="btn">加关注</a></p>
+	                  					</div>
+	                  					</div>
+									</li>
+									<li class="span2">
+										<div class="thumbnail">
+											<a href="#"> 
+												<img src="${user.profileImageURL}" alt="">
+											</a>
+											<div class="caption">
+												<h5>${user.userName}</h5>
+			      								<p>${user.followCount}粉丝</p>
+			      								<p><a href="#" class="btn">加关注</a></p>
+	                  					</div>
+	                  					</div>
+									</li>
+									<li class="span2">
+										<div class="thumbnail">
+											<a href="#"> 
+												<img src="${user.profileImageURL}" alt="">
+											</a>
+											<div class="caption">
+												<h5>${user.userName}</h5>
+			      								<p>${user.followCount}粉丝</p>
+			      								<p><a href="#" class="btn">加关注</a></p>
+	                  					</div>
+	                  					</div>
+									</li>
+									<li class="span2">
+										<div class="thumbnail">
+											<a href="#"> 
+												<img src="${user.profileImageURL}" alt="">
+											</a>
+											<div class="caption">
+												<h5>${user.userName}</h5>
+			      								<p>${user.followCount}粉丝</p>
+			      								<p><a href="#" class="btn">加关注</a></p>
+	                  					</div>
+	                  					</div>
+									</li>
+							</c:forEach>
+						</ul>
+					</c:if>
+					<button id="sync" name="sync" type="button" class="btn btn-primary" data-toggle="button" onclick="syncSinaWeiboTag.do" >同步Tags</button>
+					</div>
 			</div>
 			<!--/span-->
 		</div><!--/row-->
