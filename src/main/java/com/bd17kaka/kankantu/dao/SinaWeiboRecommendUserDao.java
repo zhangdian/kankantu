@@ -23,12 +23,11 @@ public interface SinaWeiboRecommendUserDao {
 	 */
 	List<SinaWeiboRecommendUser> listRecommendUser(Token token, TagInfo tagInfo) throws WeiboException;
 	
-	///////////////////////////////////////////////////////////////////////////
-	// redis中推荐用户信息操作
 	/**
-	 * 保存推荐用户到redis
-	 * @param userId 我们系统中的用户ID
-	 * @param user
+	 * 获取指定uid的新浪微博用户信息
+	 * @param uid
+	 * @return
+	 * @throws WeiboException 
 	 */
-	void insert(String userId, SinaWeiboRecommendUser user, String tagName);
+	SinaWeiboRecommendUser getByUid(Token token, String uid) throws WeiboException;
 }

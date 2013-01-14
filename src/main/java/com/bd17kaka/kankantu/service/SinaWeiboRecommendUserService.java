@@ -16,4 +16,6 @@ public interface SinaWeiboRecommendUserService {
 	 * @throws WeiboException 
 	 */
 	List<SinaWeiboRecommendUser> listRecommendUser(String userId, String tagName) throws WeiboException;
+	
+	SinaWeiboRecommendUser getByUid(String userId, String uid) throws WeiboException;
 }

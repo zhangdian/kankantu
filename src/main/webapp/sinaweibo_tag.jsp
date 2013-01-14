@@ -79,7 +79,12 @@
 											<div class="caption">
 												<h5>${user.userName}</h5>
 			      								<p>${user.followCount}粉丝</p>
-			      								<p><a href="" class="btn btn-primary" id="follow_${user.userId}">加关注</a></p>
+			      								<c:if test="${user.follow eq false }">
+			      									<p><a onclick="addFollow(${user.userId}, '${cur_tag}');" class="btn btn-primary" id="follow_${user.userId}">加关注</a></p>
+			      								</c:if>
+			      								<c:if test="${user.follow eq true }">
+			      									<p><a onclick="deleteFollow(${user.userId}, '${cur_tag}');" class="btn" id="follow_${user.userId}">取消关注</a></p>
+			      								</c:if>
 	                  					</div>
 	                  					</div>
 									</li>
@@ -114,22 +119,23 @@
 	});
 	
 	/* 关注 */
-	$('a[id^="follow_"]').click(function() {
+	function addFollow(uid, tagName) {
 		var request = $.ajax({
-			url: "script.php",
+			url: "addFollow.do",
 			type: "POST",
-			data: {id : menuId},
+			data: {uid : uid, tag_name : tagName},
 			dataType: "html"
 		});
 		request.done(function(msg) {
-			$("#log").html( msg );
+			$('#follow_' + uid).html("取消关注"); 
+			$('#follow_' + uid).removeClass("btn-primary");
 		});
 		request.fail(function(jqXHR, textStatus) {
-			alert( "Request failed: " + textStatus );
-		});	
-	});
-	
-	$('a[id^="follow_"]').html("已关注");
+			alert("关注失败");
+		});
+	}
+	 
+	/* $('a[id^="follow_"]').html("已关注"); */
 	</script>
 
   </body>

@@ -2,6 +2,9 @@ package com.bd17kaka.kankantu.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Repository;
 
 import redis.clients.jedis.ShardedJedis;
@@ -25,6 +28,9 @@ import com.bd17kaka.kankantu.weibo4j.org.json.JSONObject;
 public class SinaWeiboRecommendUserDaoImpl extends RedisUtils implements SinaWeiboRecommendUserDao {
 
 	private String prefix = "sinaweibo:follow:";
+	
+	@Resource(name = "sinaWeiboFollowDao")
+	private SinaWeiboFollowDao sinaWeiboFollowDao;
 	
 	@Override
 	public List<SinaWeiboRecommendUser> listRecommendUser(Token token, TagInfo tagInfo) throws WeiboException {
@@ -59,6 +65,7 @@ public class SinaWeiboRecommendUserDaoImpl extends RedisUtils implements SinaWei
 				s.setFollowCount(o.getString("followers_count"));
 				s.setUserId(o.getString("uid"));
 				s.setUserName(o.getString("screen_name"));
+				s.setFollow(sinaWeiboFollowDao.exist(token.getUserId(), o.getString("uid")));
 				
 				// 获取用户的头像地址
 				Users users = new Users();
@@ -79,22 +86,21 @@ public class SinaWeiboRecommendUserDaoImpl extends RedisUtils implements SinaWei
 	}
 
 	@Override
-	public void insert(String userId, SinaWeiboRecommendUser user, String tagName) {
-		ShardedJedis jedis =  getConnection(); 
-		String keyPrefix = prefix + userId + ":";
-		String key = null;
-		// 保存数据到 sinaweibo:follow:userid:follows
-		key = keyPrefix + "follows";
-		jedis.sadd(key, user.getUserId());
+	public SinaWeiboRecommendUser getByUid(Token token, String uid) throws WeiboException {
+		Users users = new Users();
+		users.setToken(token.getToken());
 		
-		// 保存数据到 sinaweibo:follow:userid:followid:tags
-		key = keyPrefix + user.getUserId() + ":tags";
-		jedis.sadd(key, tagName);
+		User user = users.showUserById(uid);
+		if (null == user) {
+			return null;
+		}
 		
-		// 保存数据到 sinaweibo:tag:userid:tagname:follows
-		key = "sinaweibo:tag:" + userId + ":" + tagName + ":follows";
-		jedis.sadd(key, user.getUserId());
-		
-		returnConnection(jedis);
+		return new SinaWeiboRecommendUser(
+				uid, 
+				user.getScreenName(), 
+				String.valueOf(user.getFollowersCount()), 
+				user.getAvatarLarge(), 
+				sinaWeiboFollowDao.exist(token.getUserId(), uid)
+				);
 	}
 }

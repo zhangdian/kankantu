@@ -45,4 +45,17 @@ public class SinaWeiboRecommendUserServiceImpl implements SinaWeiboRecommendUser
 		List<SinaWeiboRecommendUser> list = sinaWeiboRecommendUserDao.listRecommendUser(token, tagInfo);
 		return list;
 	}
+
+	@Override
+	public SinaWeiboRecommendUser getByUid(String userId, String uid) throws WeiboException {
+		// 获取用户的token
+		Token token = sinaWeiboTokenDao.get(userId);
+		if (null == token) {
+			// 这里可以抛出一个异常，让用户去授权
+			return null;
+		}
+		
+		// 获取用户信息
+		return sinaWeiboRecommendUserDao.getByUid(token, uid);
+	}
 }

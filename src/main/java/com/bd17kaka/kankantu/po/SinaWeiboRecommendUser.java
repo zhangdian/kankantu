@@ -21,19 +21,32 @@ public class SinaWeiboRecommendUser implements java.io.Serializable {
 	 * 头像地址
 	 */
 	private String profileImageURL;
+	/**
+	 * 是否已经follow了
+	 */
+	private boolean follow;
 
 	public SinaWeiboRecommendUser() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SinaWeiboRecommendUser(String userId, String userName, String followCount,
-			String profileImageURL) {
+	public SinaWeiboRecommendUser(String userId, String userName,
+			String followCount, String profileImageURL, boolean follow) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.followCount = followCount;
 		this.profileImageURL = profileImageURL;
+		this.follow = follow;
+	}
+
+	public boolean isFollow() {
+		return follow;
+	}
+
+	public void setFollow(boolean isFollow) {
+		this.follow = isFollow;
 	}
 
 	public String getUserId() {
@@ -70,8 +83,10 @@ public class SinaWeiboRecommendUser implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "RecommendUser [userId=" + userId + ", userName=" + userName
-				+ ", followCount=" + followCount + ", profileImageURL="
-				+ profileImageURL + "]";
+		return "SinaWeiboRecommendUser [userId=" + userId + ", userName="
+				+ userName + ", followCount=" + followCount
+				+ ", profileImageURL=" + profileImageURL + ", isFollow="
+				+ follow + "]";
 	}
+
 }
