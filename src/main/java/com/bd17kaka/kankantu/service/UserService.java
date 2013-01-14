@@ -7,8 +7,9 @@ public interface UserService {
 	/**
 	 * 用户注册
 	 * @param user
+	 * @return 返回用户id
 	 */
-	void signup(User user);
+	Long signup(User user);
 	
 	/**
 	 * 用户是否存在

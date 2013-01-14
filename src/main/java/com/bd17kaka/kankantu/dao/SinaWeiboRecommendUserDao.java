@@ -25,4 +25,10 @@ public interface SinaWeiboRecommendUserDao {
 	
 	///////////////////////////////////////////////////////////////////////////
 	// redis中推荐用户信息操作
+	/**
+	 * 保存推荐用户到redis
+	 * @param userId 我们系统中的用户ID
+	 * @param user
+	 */
+	void insert(String userId, SinaWeiboRecommendUser user, String tagName);
 }

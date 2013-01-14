@@ -44,15 +44,14 @@
  		<jsp:param value="sinaweibo" name="flag"/>
  	</jsp:include>
  	
-    <div class="container-fluid">
-      <div class="row-fluid">
+    <div class="container">
+      <div class="row">
         <div class="span2">
          <jsp:include page="sinaweibo_left.jsp">
          	<jsp:param value="tag" name="flag"/>
          </jsp:include>
         </div><!--/span-->
 			<div class="span10">
-					<div class="row-fluid">
 					<c:if test="${list_tag ne null }">
 						<ul class="nav nav-tabs">
 							<li <c:if test="${cur_tag eq \"all\" }">class="active"</c:if> ><a href="listRecommendUser.do" >ALL</a></li>
@@ -80,51 +79,17 @@
 											<div class="caption">
 												<h5>${user.userName}</h5>
 			      								<p>${user.followCount}粉丝</p>
-			      								<p><a href="#" class="btn">加关注</a></p>
-	                  					</div>
-	                  					</div>
-									</li>
-									<li class="span2">
-										<div class="thumbnail">
-											<a href="#"> 
-												<img src="${user.profileImageURL}" alt="">
-											</a>
-											<div class="caption">
-												<h5>${user.userName}</h5>
-			      								<p>${user.followCount}粉丝</p>
-			      								<p><a href="#" class="btn">加关注</a></p>
-	                  					</div>
-	                  					</div>
-									</li>
-									<li class="span2">
-										<div class="thumbnail">
-											<a href="#"> 
-												<img src="${user.profileImageURL}" alt="">
-											</a>
-											<div class="caption">
-												<h5>${user.userName}</h5>
-			      								<p>${user.followCount}粉丝</p>
-			      								<p><a href="#" class="btn">加关注</a></p>
-	                  					</div>
-	                  					</div>
-									</li>
-									<li class="span2">
-										<div class="thumbnail">
-											<a href="#"> 
-												<img src="${user.profileImageURL}" alt="">
-											</a>
-											<div class="caption">
-												<h5>${user.userName}</h5>
-			      								<p>${user.followCount}粉丝</p>
-			      								<p><a href="#" class="btn">加关注</a></p>
+			      								<p><a href="" class="btn btn-primary" id="follow_${user.userId}">加关注</a></p>
 	                  					</div>
 	                  					</div>
 									</li>
 							</c:forEach>
 						</ul>
 					</c:if>
+					<hr>
+					<a>继续加载</a>
+					<hr>
 					<button id="sync" name="sync" type="button" class="btn btn-primary" data-toggle="button" onclick="syncSinaWeiboTag.do" >同步Tags</button>
-					</div>
 			</div>
 			<!--/span-->
 		</div><!--/row-->
@@ -143,9 +108,28 @@
     <script src="style/js/jquery.js"></script>
     <script src="style/js/bootstrap.js"></script>
 	<script type="text/javascript">
+	/* tag分组同步 */
 	$("#sync").on("click", function () {
 		window.location.href="syncSinaWeiboTag.do";
 	});
+	
+	/* 关注 */
+	$('a[id^="follow_"]').click(function() {
+		var request = $.ajax({
+			url: "script.php",
+			type: "POST",
+			data: {id : menuId},
+			dataType: "html"
+		});
+		request.done(function(msg) {
+			$("#log").html( msg );
+		});
+		request.fail(function(jqXHR, textStatus) {
+			alert( "Request failed: " + textStatus );
+		});	
+	});
+	
+	$('a[id^="follow_"]').html("已关注");
 	</script>
 
   </body>

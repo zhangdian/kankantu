@@ -71,8 +71,9 @@ public class AdminContoller extends BaseController {
 		}
 		
 		// 处理注册逻辑
+		Long userId = 0L;
 		try {
-		userService.signup(new User(0, userName, password, email));
+			userId = userService.signup(new User(0, userName, password, email));
 		} catch (UserNameExistException e) {
 			request.setAttribute("msg", "用户名已存在");
 			return "signup";
@@ -81,6 +82,7 @@ public class AdminContoller extends BaseController {
 			return "signup";
 		}
 		request.getSession().setAttribute("kankantu_user", userName);
+		request.getSession().setAttribute("kankantu_userid", userId);
 		return "main";
 	}
 	

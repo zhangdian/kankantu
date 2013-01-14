@@ -3,6 +3,9 @@ package com.bd17kaka.kankantu.dao;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
+
+import redis.clients.jedis.ShardedJedis;
+
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
 import com.bd17kaka.kankantu.po.TagInfo;
 import com.bd17kaka.kankantu.po.Token;
@@ -21,6 +24,8 @@ import com.bd17kaka.kankantu.weibo4j.org.json.JSONObject;
 @Repository(value="sinaWeiboRecommendUserDao")
 public class SinaWeiboRecommendUserDaoImpl extends RedisUtils implements SinaWeiboRecommendUserDao {
 
+	private String prefix = "sinaweibo:follow:";
+	
 	@Override
 	public List<SinaWeiboRecommendUser> listRecommendUser(Token token, TagInfo tagInfo) throws WeiboException {
 		// 设置token
@@ -71,5 +76,25 @@ public class SinaWeiboRecommendUserDaoImpl extends RedisUtils implements SinaWei
 			}
 		}
 		return listSinaWeiboRecommendUser;
+	}
+
+	@Override
+	public void insert(String userId, SinaWeiboRecommendUser user, String tagName) {
+		ShardedJedis jedis =  getConnection(); 
+		String keyPrefix = prefix + userId + ":";
+		String key = null;
+		// 保存数据到 sinaweibo:follow:userid:follows
+		key = keyPrefix + "follows";
+		jedis.sadd(key, user.getUserId());
+		
+		// 保存数据到 sinaweibo:follow:userid:followid:tags
+		key = keyPrefix + user.getUserId() + ":tags";
+		jedis.sadd(key, tagName);
+		
+		// 保存数据到 sinaweibo:tag:userid:tagname:follows
+		key = "sinaweibo:tag:" + userId + ":" + tagName + ":follows";
+		jedis.sadd(key, user.getUserId());
+		
+		returnConnection(jedis);
 	}
 }

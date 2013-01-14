@@ -17,13 +17,15 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 	
 	@Override
-	public void signup(User user) {
+	public Long signup(User user) {
 		if (userDao.hasUserName(user.getUserName())) {
 			throw new UserNameExistException(user.getUserName());
 		}
-		if (0L == userDao.insert(user)) {
+		Long ret = userDao.insert(user); 
+		if (0L == ret) {
 			throw new SignupException(user.getUserName());
 		}
+		return ret;
 	}
 
 	@Override
