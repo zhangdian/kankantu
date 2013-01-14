@@ -52,7 +52,7 @@ public class SinaWeiboAuthorizeServiceImpl implements SinaWeiboAuthorizeService 
 			throw new StoreTokenException(time);
 		}
 		// 保存token到最新的token
-		Token t = new Token(uid, user.getScreenName(), token.getAccessToken(), "0");
+		Token t = new Token(userId, uid, user.getScreenName(), token.getAccessToken(), "0");
 		sinaWeiboTokenDao.insert(t, userId);
 	}
 

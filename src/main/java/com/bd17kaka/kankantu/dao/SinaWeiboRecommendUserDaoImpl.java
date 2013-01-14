@@ -94,7 +94,8 @@ public class SinaWeiboRecommendUserDaoImpl extends RedisUtils implements SinaWei
 		if (null == user) {
 			return null;
 		}
-		
+		System.out.println(token.getUserId());
+		System.out.println(uid);
 		return new SinaWeiboRecommendUser(
 				uid, 
 				user.getScreenName(), 

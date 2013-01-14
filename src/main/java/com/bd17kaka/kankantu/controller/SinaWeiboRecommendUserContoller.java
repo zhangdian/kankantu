@@ -55,6 +55,9 @@ public class SinaWeiboRecommendUserContoller extends BaseController {
 		// 获取推荐用户
 		List<SinaWeiboRecommendUser> list = sinaWeiboRecommendUserService.listRecommendUser(userId, tagName);
 		request.setAttribute("list_recommend_user", list);
+		for (SinaWeiboRecommendUser t : list) {
+			System.out.println(t.toString());
+		}
 
 		// 获取所有tag，设置cur_tag
 		List<TagInfo> list2 = sinaWeiboTagService.list(userId);

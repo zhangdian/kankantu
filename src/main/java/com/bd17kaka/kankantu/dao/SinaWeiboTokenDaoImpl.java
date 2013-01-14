@@ -25,7 +25,7 @@ public class SinaWeiboTokenDaoImpl extends RedisUtils implements SinaWeiboTokenD
 		key = prefix + userId + ":weibousername";
 		jedis.set(key, t.getUserName());
 		key = prefix + userId + ":weibouserid";
-		jedis.set(key, t.getUserId());
+		jedis.set(key, t.getUid());
 		returnConnection(jedis);
 	}
 
@@ -35,6 +35,7 @@ public class SinaWeiboTokenDaoImpl extends RedisUtils implements SinaWeiboTokenD
 		// 所以不管是先获取键值还是先获取键值剩下的时间，都得判断
 		ShardedJedis jedis =  getConnection();
 		Token t = new Token();
+		t.setUserId(userId);
 		String key;
 		// 获取weibousername和weibouserid
 		key = prefix + userId + ":weibousername";
@@ -42,7 +43,7 @@ public class SinaWeiboTokenDaoImpl extends RedisUtils implements SinaWeiboTokenD
 		t.setUserName(userName);
 		key = prefix + userId + ":weibouserid";
 		String uid = jedis.get(key);
-		t.setUserId(uid);
+		t.setUid(uid);
 		
 		// 获取键值
 		key = prefix + userId + ":token";

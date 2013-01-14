@@ -6,8 +6,13 @@ package com.bd17kaka.kankantu.po;
 public class Token implements java.io.Serializable {
 	private static final long serialVersionUID = -1744081377872974319L;
 
-	// sinaweibo里的 userid和username
+	/**
+	 * 我们系统里的userid
+	 */
 	private String userId;
+
+	// sinaweibo里的 userid和username
+	private String uid;
 	private String userName;
 	private String token;
 	private String expire;
@@ -17,12 +22,22 @@ public class Token implements java.io.Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Token(String userId, String userName, String token, String expire) {
+	public Token(String userId, String uid, String userName, String token,
+			String expire) {
 		super();
 		this.userId = userId;
+		this.uid = uid;
 		this.userName = userName;
 		this.token = token;
 		this.expire = expire;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getUserName() {
@@ -33,12 +48,12 @@ public class Token implements java.io.Serializable {
 		this.userName = userName;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public String getToken() {
@@ -59,7 +74,8 @@ public class Token implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "Token [userId=" + userId + ", userName=" + userName
-				+ ", token=" + token + ", expire=" + expire + "]";
+		return "Token [userId=" + userId + ", uid=" + uid + ", userName="
+				+ userName + ", token=" + token + ", expire=" + expire + "]";
 	}
+
 }

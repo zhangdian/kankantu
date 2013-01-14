@@ -30,7 +30,7 @@ public class SinaWeiboTagDaoImpl extends RedisUtils implements SinaWeiboTagDao {
 		t.setToken(token.getToken());
 		
 		// 获取所有tag
-		List<Tag> list = t.getTags(token.getUserId());
+		List<Tag> list = t.getTags(token.getUid());
 		if (null == list) {
 			return null;
 		}

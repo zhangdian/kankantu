@@ -9,7 +9,9 @@ import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
 public interface SinaWeiboAuthorizeService {
 	
 	/**
-	 * 获取访问api的token
+	 *  获取访问api的token
+	 * @param code
+	 * @param userid
 	 * @throws WeiboException
 	 */
 	void storeToken(String code, String userid) throws WeiboException;
