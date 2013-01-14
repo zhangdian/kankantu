@@ -15,7 +15,7 @@ import com.bd17kaka.kankantu.weibo4j.org.json.JSONException;
 import com.bd17kaka.kankantu.weibo4j.org.json.JSONObject;
 
 /**
- * 队列信息DAO实现
+ * 新浪微博推荐用户信息DAO实现
  * @author bd17kaka
  */
 @Repository(value="sinaWeiboRecommendUserDao")
@@ -51,7 +51,7 @@ public class SinaWeiboRecommendUserDaoImpl extends RedisUtils implements SinaWei
 			SinaWeiboRecommendUser s = new SinaWeiboRecommendUser();
 			try {
 				// 设置用户信息
-				s.setFollowCount(o.getString("screen_name"));
+				s.setFollowCount(o.getString("followers_count"));
 				s.setUserId(o.getString("uid"));
 				s.setUserName(o.getString("screen_name"));
 				
@@ -62,7 +62,7 @@ public class SinaWeiboRecommendUserDaoImpl extends RedisUtils implements SinaWei
 				if (null == user) {
 					continue;
 				}
-				s.setProfileImageURL(user.getProfileImageUrl());
+				s.setProfileImageURL(user.getAvatarLarge());
 				
 				// 加入到list中
 				listSinaWeiboRecommendUser.add(s);

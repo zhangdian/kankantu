@@ -69,9 +69,17 @@
 					</ul>
 				</c:if>
 				<c:if test="${list_recommend_user ne null}">
-					<c:forEach var="user" items="${list_recommend_user}">
-						<img src="${user.profileImageURL}" />
-					</c:forEach>
+					<ul class="thumbnails">
+						<c:forEach var="user" items="${list_recommend_user}">
+								<li class="span2">
+									<a href="#" class="thumbnail"> 
+										<img src="${user.profileImageURL}" alt="">
+									</a>
+									<h5>${user.userName}</h5>
+      								<p>${user.followCount}</p>
+								</li>
+						</c:forEach>
+					</ul>
 				</c:if>
 <!-- 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#">卡卡</a></li>
