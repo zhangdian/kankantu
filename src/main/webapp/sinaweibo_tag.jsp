@@ -69,7 +69,7 @@
 						</ul>
 					</c:if>
 					<c:if test="${list_user ne null}">
-						<ul class="thumbnails">
+						<ul class="thumbnails" id="list_recommend_user">
 							<c:forEach var="user" items="${list_user}">
 									<li class="span2">
 										<div class="thumbnail">
@@ -91,15 +91,13 @@
 							</c:forEach>
 						</ul>
 					</c:if>
-					<hr>
-					<a>继续加载</a>
+					<button type="button" class="btn" onclick="goon_load()" >继续加载</button>
 					<hr>
 					<button id="sync" name="sync" type="button" class="btn btn-primary" data-toggle="button" onclick="syncSinaWeiboTag.do" >同步Tags</button>
 			</div>
 			<!--/span-->
 		</div><!--/row-->
-
-      <hr>
+      <hr>	
 
       <footer>
         <p>&copy; kankantu 2012</p>
@@ -121,6 +119,21 @@
 	$("#sync").on("click", function () {
 		window.location.href="syncSinaWeiboTag.do";
 	});
+	
+	/* 继续加载 */
+	function goon_load() {
+		var request = $.ajax({
+			url: "listMoreRecommendUser.do",
+			type: "POST",
+			dataType: "html"
+		}); 
+		request.done(function(msg) {
+			$("#list_recommend_user").append(msg);
+		});
+		request.fail(function(jqXHR, textStatus) {
+			$("#list_recommend_user").append(textStatus);
+		});
+	}
 	
 	/* 关注 */
 	function addFollow(uid, tagName) {

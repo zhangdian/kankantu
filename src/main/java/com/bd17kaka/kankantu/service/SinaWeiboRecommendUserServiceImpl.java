@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.bd17kaka.kankantu.dao.SinaWeiboFollowDao;
-import com.bd17kaka.kankantu.dao.SinaWeiboRecommendUserDao;
 import com.bd17kaka.kankantu.dao.SinaWeiboTagDao;
 import com.bd17kaka.kankantu.dao.SinaWeiboTokenDao;
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
@@ -35,10 +34,9 @@ public class SinaWeiboRecommendUserServiceImpl implements SinaWeiboRecommendUser
 	private SinaWeiboFollowDao sinaWeiboFollowDao;
 
 	@Override
-	public List<SinaWeiboRecommendUser> listRecommendUser(String userId, String tagName) throws WeiboException {
-		// 获取tag对象
-		TagInfo tagInfo = sinaWeiboTagDao.get(tagName);
-		if (null == tagInfo) {
+	public List<SinaWeiboRecommendUser> listRecommendUser(String userId, List<JSONObject> result) throws WeiboException {
+		// 参数检查
+		if (null == result) {
 			return null;
 		}
 		
@@ -49,30 +47,10 @@ public class SinaWeiboRecommendUserServiceImpl implements SinaWeiboRecommendUser
 			return null;
 		}
 		
-		// 设置token
-		Search search = new Search();
-		search.setToken(token.getToken());
-		
-		// 执行搜索
-		String word = tagInfo.getTagName();
-		JSONArray result = search.searchSuggestionsUsers(word, 10);
-		if (null == result || result.length() == 0) {
-			return null;
-		}
-		
 		// 瓶装成TagInfo对象
 		List<SinaWeiboRecommendUser> listSinaWeiboRecommendUser = new ArrayList<SinaWeiboRecommendUser>();
-		for (int i = 0; i < result.length(); ++i) {
-			JSONObject o = null;
-			try {
-				o = (JSONObject) result.get(i);
-			} catch (JSONException e) {
-				continue;
-			}
-		
-			if (null == o) {
-				continue;
-			}
+		for (int i = 0; i < result.size(); ++i) {
+			JSONObject o = result.get(i);
 			
 			SinaWeiboRecommendUser s = new SinaWeiboRecommendUser();
 			try {
@@ -127,5 +105,47 @@ public class SinaWeiboRecommendUserServiceImpl implements SinaWeiboRecommendUser
 				user.getAvatarLarge(), 
 				sinaWeiboFollowDao.exist(token.getUserId(), uid)
 				);
+	}
+
+	@Override
+	public List<JSONObject> getAllRecommendUser(String userId, String tagName) {
+		// 获取tag对象
+		TagInfo tagInfo = sinaWeiboTagDao.get(tagName);
+			if (null == tagInfo) {
+			return null;
+		}
+		
+		// 获取用户的token
+		Token token = sinaWeiboTokenDao.get(userId);
+		if (null == token) {
+			// 这里可以抛出一个异常，让用户去授权
+			return null;
+		}
+		
+		// 设置token
+		Search search = new Search();
+		search.setToken(token.getToken());
+		
+		// 执行搜索
+		String word = tagInfo.getTagName();
+		JSONArray result = null;
+		try {
+			result = search.searchSuggestionsUsers(word, 1000);
+		} catch (WeiboException e) {
+		}
+		if (null == result || result.length() == 0) {
+			return null;
+		}
+		
+		// 拼装成list
+		List<JSONObject> list = new ArrayList<JSONObject>();
+		for (int i = 0; i < result.length(); i++) {
+			try {
+				list.add((JSONObject)result.get(i));
+			} catch (JSONException e) {
+			}
+		}
+		
+		return list;
 	}
 }
