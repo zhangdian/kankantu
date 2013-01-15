@@ -18,14 +18,13 @@ public class SinaWeiboFollowDaoImpl extends RedisUtils implements SinaWeiboFollo
 	@Override
 	public void insert(String userId, SinaWeiboRecommendUser user, String tagName) {
 		ShardedJedis jedis =  getConnection(); 
-		String keyPrefix = followPrefix + userId + ":";
 		String key = null;
 		// 保存数据到 sinaweibo:follow:userid:follows
-		key = keyPrefix + "follows";
+		key = followPrefix + userId + ":follows";
 		jedis.sadd(key, user.getUserId());
 		
 		// 保存数据到 sinaweibo:follow:userid:followid:tags
-		key = keyPrefix + user.getUserId() + ":tags";
+		key = followPrefix + userId + ":" + user.getUserId() + ":tags";
 		jedis.sadd(key, tagName);
 		
 		// 保存数据到 sinaweibo:tag:userid:tagname:follows
@@ -48,19 +47,19 @@ public class SinaWeiboFollowDaoImpl extends RedisUtils implements SinaWeiboFollo
 	public void delete(String userId, SinaWeiboRecommendUser user,
 			String tagName) {
 		ShardedJedis jedis =  getConnection(); 
-		String keyPrefix = followPrefix + userId + ":";
 		String key = null;
 		// 删除数据 sinaweibo:tag:userid:tagname:follows
 		key = tagPrefix + userId + ":" + tagName + ":follows";
 		jedis.srem(key, user.getUserId());
 
 		// 删除数据 sinaweibo:follow:userid:followid:tags
-		key = keyPrefix + user.getUserId() + ":tags";
+		key = followPrefix + userId + ":" + user.getUserId() + ":tags";
 		jedis.srem(key, tagName);
 		
 		// 如果用户关注的这个用户的tags数为0
 		// 那么删除这个关注的用户，sinaweibo:follow:userid:follows
 		if (0L == jedis.scard(key)) {
+			key = followPrefix + userId + ":follows";
 			jedis.srem(key, user.getUserId());
 		}
 		
