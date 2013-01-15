@@ -52,7 +52,7 @@ public class SinaWeiboFollowDaoImpl extends RedisUtils implements SinaWeiboFollo
 		String key = null;
 		// 删除数据 sinaweibo:tag:userid:tagname:follows
 		key = tagPrefix + userId + ":" + tagName + ":follows";
-		jedis.sadd(key, user.getUserId());
+		jedis.srem(key, user.getUserId());
 
 		// 删除数据 sinaweibo:follow:userid:followid:tags
 		key = keyPrefix + user.getUserId() + ":tags";
