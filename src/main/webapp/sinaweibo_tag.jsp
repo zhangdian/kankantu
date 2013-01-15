@@ -61,16 +61,16 @@
 							<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">more<b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li><a href="#dropdown1">推荐用户</a></li>
-									<li><a href="#dropdown2">该组用户</a></li>
+									<li><a href="listRecommendUser.do?tag_name=${cur_tag}">推荐用户</a></li>
+									<li><a href="showFollows.do?tag_name=${cur_tag}">该组用户</a></li>
 									<li><a href="#dropdown2">该组微博</a></li>
 								</ul>
 							</li>
 						</ul>
 					</c:if>
-					<c:if test="${list_recommend_user ne null}">
+					<c:if test="${list_user ne null}">
 						<ul class="thumbnails">
-							<c:forEach var="user" items="${list_recommend_user}">
+							<c:forEach var="user" items="${list_user}">
 									<li class="span2">
 										<div class="thumbnail">
 											<a href="#"> 
@@ -113,6 +113,10 @@
     <script src="style/js/jquery.js"></script>
     <script src="style/js/bootstrap.js"></script>
 	<script type="text/javascript">
+	$(document).ready(function() {
+		
+	});
+	
 	/* tag分组同步 */
 	$("#sync").on("click", function () {
 		window.location.href="syncSinaWeiboTag.do";
@@ -129,9 +133,34 @@
 		request.done(function(msg) {
 			$('#follow_' + uid).html("取消关注"); 
 			$('#follow_' + uid).removeClass("btn-primary");
+			$('#follow_' + uid).attr("onclick", "");
+			$('#follow_' + uid).bind("click", function () {
+				deleteFollow(uid, tagName);
+			})
 		});
 		request.fail(function(jqXHR, textStatus) {
 			alert("关注失败");
+		});
+	}
+	
+	/* 取消关注 */
+	function deleteFollow(uid, tagName) {
+		var request = $.ajax({
+			url: "deleteFollow.do",
+			type: "POST",
+			data: {uid : uid, tag_name : tagName},
+			dataType: "html"
+		});
+		request.done(function(msg) {
+			$('#follow_' + uid).html("加关注"); 
+			$('#follow_' + uid).addClass("btn-primary");
+			$('#follow_' + uid).attr("onclick", "");
+			$('#follow_' + uid).bind("click", function () {
+				addFollow(uid, tagName);
+			})
+		});
+		request.fail(function(jqXHR, textStatus) {
+			alert("取消关注失败");
 		});
 	}
 	 
