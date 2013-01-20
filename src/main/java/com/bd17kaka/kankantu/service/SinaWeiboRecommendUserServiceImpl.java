@@ -1,6 +1,7 @@
 package com.bd17kaka.kankantu.service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -108,7 +109,7 @@ public class SinaWeiboRecommendUserServiceImpl implements SinaWeiboRecommendUser
 	}
 
 	@Override
-	public List<JSONObject> getAllRecommendUser(String userId, String tagName) {
+	public LinkedList<JSONObject> getAllRecommendUser(String userId, String tagName) {
 		// 获取tag对象
 		TagInfo tagInfo = sinaWeiboTagDao.get(tagName);
 			if (null == tagInfo) {
@@ -138,14 +139,14 @@ public class SinaWeiboRecommendUserServiceImpl implements SinaWeiboRecommendUser
 		}
 		
 		// 拼装成list
-		List<JSONObject> list = new ArrayList<JSONObject>();
+		LinkedList<JSONObject> list = new LinkedList<JSONObject>();
 		for (int i = 0; i < result.length(); i++) {
 			try {
-				list.add((JSONObject)result.get(i));
+//				list.add((JSONObject)result.get(i));
+				list.push((JSONObject)result.get(i));
 			} catch (JSONException e) {
 			}
 		}
-		
 		return list;
 	}
 }

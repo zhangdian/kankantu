@@ -1,5 +1,6 @@
 package com.bd17kaka.kankantu.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
@@ -31,7 +32,7 @@ public interface SinaWeiboRecommendUserService {
 	 * 根据指定的tagName，获取所有推荐用户列表，默认返回1000个
 	 * @param userId
 	 * @param tagName
-	 * @return
+	 * @return linked list
 	 */
-	List<JSONObject> getAllRecommendUser(String userId, String tagName);
+	LinkedList<JSONObject> getAllRecommendUser(String userId, String tagName);
 }

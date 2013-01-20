@@ -76,31 +76,34 @@
 						</div>
 					</div>	
 					<div class="container-fluid" id="list_recommend_user">
-						<div class="row-fluid">
-							<c:if test="${list ne null}">
-								<c:forEach var="col_list" items="${list}" varStatus="status">
-									<div class="span2" id="col_${status.index}">
-										<c:forEach var="user" items="${col_list}">
-											<div class="thumbnail">
-												<a href="#" id="recommend_user_image_${user.userId}"> 
-													<img src="${user.profileImageURL}" alt="">
-												</a>
-												<div class="caption" id="recommend_user_detail_${user.userId}">
-													<h5>${user.userName}</h5>
-				      								<p>${user.followCount}粉丝</p>
-				      								<c:if test="${user.follow eq false }">
-				      									<p><a onclick="addFollow(${user.userId}, '${cur_tag}');" class="btn btn-primary" id="follow_${user.userId}">加关注</a></p>
-				      								</c:if>
-				      								<c:if test="${user.follow eq true }">
-				      									<p><a onclick="deleteFollow(${user.userId}, '${cur_tag}');" class="btn" id="follow_${user.userId}">取消关注</a></p>
-				      								</c:if>
-		                  						</div>
-		                  					</div>
-										</c:forEach>
-									</div>
-								</c:forEach>
+					<div class="row-fluid">
+						<div class="span12">
+							<c:if test="${list_user ne null}">
+								<ul class="thumbnails">
+									<c:forEach var="user" items="${list_user}">
+											<li class="span2">
+												<div class="thumbnail">
+													<a href="#" id="recommend_user_image_${user.userId}"> 
+														<img src="${user.profileImageURL}" alt="">
+													</a>
+													<div class="caption" id="recommend_user_detail_${user.userId}">
+														<h5>${user.userName}</h5>
+					      								<p>${user.followCount}粉丝</p>
+					      								<c:if test="${user.follow eq false }">
+					      									<p><a onclick="addFollow(${user.userId}, '${cur_tag}');" class="btn btn-primary" id="follow_${user.userId}">加关注</a></p>
+					      								</c:if>
+					      								<c:if test="${user.follow eq true }">
+					      									<p><a onclick="deleteFollow(${user.userId}, '${cur_tag}');" class="btn" id="follow_${user.userId}">取消关注</a></p>
+					      								</c:if>
+			                  						</div>
+			                  					</div>
+											</li>
+									</c:forEach>
+								</ul>
 							</c:if>
+							
 						</div>
+					</div>
 					</div>
 			</div>
 			<button type="button" class="btn" onclick="goon_load()" >继续加载</button>
@@ -127,7 +130,29 @@
 	<script type="text/javascript">
 	$(document).ready(function() {
 		/* 隐藏所有图片的说明部分 */
+		$('div[id^="recommend_user_detail_"]').hide();
 	});
+	
+	$('a[id^="recommend_user_image_"]').hover(
+		function () {
+ 		 	var id = $(this).attr("id");
+			var tokens = id.split("_image_");
+			if (tokens.length != 2) {
+				return;
+			}
+			var userId = tokens[1];
+			$('#recommend_user_detail_' + userId).show(); 
+		},
+		function () {
+			var id = $(this).attr("id");
+			var tokens = id.split("_image_");
+			if (tokens.length != 2) {
+				return;
+			}
+			var userId = tokens[1];
+			$('#recommend_user_detail_' + userId).hide();
+		}
+	); 
 	
 	/* tag分组同步 */
 	$("#sync").on("click", function () {
@@ -135,18 +160,17 @@
 	});
 	
 	/* 继续加载 */
-	function goon_load(col_index) {
-		var col_index = col_index;
+	function goon_load() {
 		var request = $.ajax({
-			url: "listMoreRecommendUser.do?col_index=" + col_index,
+			url: "listMoreRecommendUser.do",
 			type: "POST",
 			dataType: "html"
 		}); 
 		request.done(function(msg) {
-			$("#col_" + col_index).append(msg);
-			
+			$("#list_recommend_user").append(msg);
 		});
 		request.fail(function(jqXHR, textStatus) {
+			$("#list_recommend_user").append(textStatus);
 		});
 	}
 	
@@ -192,20 +216,6 @@
 		});
 	}
 	 
-	/* 滚动加载 */
-	$(window).scroll(function () {
-		var winH = $(window).height(); //页面可视区域高度   
-        var pageH = $(document.body).height();   
-        var scrollT = $(window).scrollTop(); //滚动条top   
-        var aa = (pageH - winH - scrollT)/winH;   
-        if(aa < 0.02){   
-        	var col_num = 6;
-        	for (var i = 0; i < col_num; ++i) {
-        		goon_load(i);	
-        	}
-        }   
-    });   
-	
 	/* $('a[id^="follow_"]').html("已关注"); */
 	</script>
 

@@ -1,6 +1,8 @@
 package com.bd17kaka.kankantu.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -53,14 +55,24 @@ public class SinaWeiboRecommendUserContoller extends BaseController {
 		
 		// 获取推荐用户
 		// 首选获取所有的推荐用户信息
-		List<JSONObject> result = sinaWeiboRecommendUserService.getAllRecommendUser(userId, tagName);
+		LinkedList<JSONObject> result = sinaWeiboRecommendUserService.getAllRecommendUser(userId, tagName);
+		System.out.println(result.size());
 		if (null == result) {
-			request.setAttribute("list_user", null);
+			request.setAttribute("list", null);
 		} else {
-			List<JSONObject> subArray = result.subList(0, 10);
-			List<SinaWeiboRecommendUser> list = sinaWeiboRecommendUserService.listRecommendUser(userId, subArray);
-			request.setAttribute("list_user", list);
-			request.getSession().setAttribute("all_recommend_user", result.subList(10, result.size()));
+			List<List<SinaWeiboRecommendUser>> list = new ArrayList<List<SinaWeiboRecommendUser>>();
+			for (int i = 0; i < 6; ++i) { // 6列
+				List<JSONObject> subArray = new ArrayList<JSONObject>();
+				for (int j = 0; j < 3; ++j) {
+					subArray.add(result.pop());
+				}
+//				List<JSONObject> subArray = result.subList(3 * i, 3 * (i + 1));
+				List<SinaWeiboRecommendUser> listCol = sinaWeiboRecommendUserService.listRecommendUser(userId, subArray);
+				list.add(listCol);
+			}
+			request.setAttribute("list", list);
+//			request.getSession().setAttribute("all_recommend_user", result.subList(6 * 3, result.size()));
+			request.getSession().setAttribute("all_recommend_user", result);
 		}
 
 		// 获取所有tag，设置cur_tag
@@ -90,44 +102,33 @@ public class SinaWeiboRecommendUserContoller extends BaseController {
 			return;
 		}
 
-		//  获取最新的10个推荐用户信息
-		List<JSONObject> subArray = null;
+		//  获取最新的6个推荐用户信息
+		List<JSONObject> subArray = new ArrayList<JSONObject>();
 		List<SinaWeiboRecommendUser> list = null;
-		if (result.size() < 10) {
-			subArray = result.subList(0, result.size());
-			request.getSession().setAttribute("all_recommend_user", null);
-		} else {
-			subArray = result.subList(0, 10);
-			request.getSession().setAttribute("all_recommend_user", result.subList(10, result.size()));
+		for (int i = 0; i < ((result.size() < 2) ? result.size() : 2); i++) {
+			subArray.add((JSONObject)((LinkedList<JSONObject>) request.getSession().getAttribute("all_recommend_user")).pop());
 		}
-		list = sinaWeiboRecommendUserService.listRecommendUser(userId, subArray);
 		
+		list = sinaWeiboRecommendUserService.listRecommendUser(userId, subArray);
 		// 拼装成html
 		String msg = "";
 		for (SinaWeiboRecommendUser s : list) {
-			msg += 
-				"<li class='span2'>" +
-				"	<div class='thumbnail'>" +
-				"		<a href='#'>" +
-				" 			<img src='"+ s.getProfileImageURL() +"' alt=''>" +
-				"		</a>" +
-				"	<div class='caption'>" +
-				"	<h5>" + s.getUserName() + "</h5>" +
-				"	<p>"+ s.getFollowCount() +"粉丝</p>" +
-				(
-						!s.isFollow() ? 
-						"		<p><a onclick=\"addFollow("+ s.getUserId() +",'" + curTag + "');\" class='btn btn-primary' id='follow_"+ s.getUserId() +"'>加关注</a></p>" +
-						"	</c:if>" 
-						:
-						"		<p><a onclick=\"deleteFollow("+ s.getUserId() +",'" + curTag + "');\" class='btn' id='follow_"+ s.getUserId() +"'>取消关注</a></p>" +
-						"	</c:if>") 
-				+
-				"	</div>" +
-				"	</div>" +
-				"</li>";
-			System.out.println(msg);
+			msg += "<div class='thumbnail'>" +
+						"<a href='#'>" +
+							"<img src='" + s.getProfileImageURL() + "' alt=''>" +
+						"</a>" +
+						"<div class='caption'>" +
+							"<h5>" + s.getUserName() + "</h5>" +
+							"<p>" + s.getFollowCount() + "粉丝</p>" +
+							(!s.isFollow() ? 
+									"<p><a onclick=\"addFollow(" + s.getUserId() + ", '" + curTag + "');\" class='btn btn-primary' id='follow_" + s.getUserId() + "'>加关注</a></p>"
+									:
+									"<p><a onclick=\"deleteFollow(" + s.getUserId() + ", '" + curTag + "');\" class='btn' id='follow_" + s.getUserId() + "'>取消关注</a></p>" 
+							) +
+						"</div>" + 
+					"</div>";
 		}
-				
+		System.out.println(msg);
 		writeHtml(request, response, msg);
 	}
 }
