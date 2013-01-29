@@ -5,9 +5,11 @@ import org.springframework.stereotype.Repository;
 import redis.clients.jedis.ShardedJedis;
 
 import com.bd17kaka.kankantu.po.Token;
+import com.bd17kaka.kankantu.weibo4j.org.json.JSONException;
+import com.bd17kaka.kankantu.weibo4j.org.json.JSONObject;
 
 /**
- * 队列信息DAO实现
+ * 用户认证的Token信息
  * @author bd17kaka
  */
 @Repository(value="sinaWeiboTokenDao")
@@ -16,9 +18,11 @@ public class SinaWeiboTokenDaoImpl extends RedisUtils implements SinaWeiboTokenD
 	private static String prefix = "sinaweibo:token:";
 
 	@Override
-	public void insert(Token t, String userId) {
+	public void insert(Token t) throws JSONException {
 		// 只需要设置token的生命周期即可，到时获取的时候，只需判断token的生命周期
 		ShardedJedis jedis =  getConnection(); 
+		String userId = t.getUserId();
+		
 		String key = prefix + userId + ":token";
 		jedis.set(key, t.getToken());
 		jedis.expire(key, 3600 * 6);
@@ -26,6 +30,15 @@ public class SinaWeiboTokenDaoImpl extends RedisUtils implements SinaWeiboTokenD
 		jedis.set(key, t.getUserName());
 		key = prefix + userId + ":weibouserid";
 		jedis.set(key, t.getUid());
+		
+		// 拼装Token对象为JSON
+		JSONObject jo = new JSONObject();
+		jo.put("user_id", t.getUserId());
+		jo.put("uid", t.getUid());
+		jo.put("user_name", t.getUserName());
+		jo.put("token", t.getToken());
+		jo.put("expire", 3600 * 6);
+		
 		returnConnection(jedis);
 	}
 

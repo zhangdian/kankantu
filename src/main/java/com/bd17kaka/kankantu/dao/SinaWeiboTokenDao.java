@@ -1,6 +1,7 @@
 package com.bd17kaka.kankantu.dao;
 
 import com.bd17kaka.kankantu.po.Token;
+import com.bd17kaka.kankantu.weibo4j.org.json.JSONException;
 
 
 /**
@@ -9,7 +10,7 @@ import com.bd17kaka.kankantu.po.Token;
  */
 public interface SinaWeiboTokenDao {
 	
-	void insert(Token t, String userId);
+	void insert(Token t) throws JSONException;
 	
 	Token get(String userId);
 }

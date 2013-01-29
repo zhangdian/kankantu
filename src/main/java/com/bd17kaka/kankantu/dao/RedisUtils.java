@@ -6,15 +6,18 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
+import com.bd17kaka.kankantu.po.Token;
+
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
+import redis.clients.johm.JOhm;
 
 @Repository
 public class RedisUtils {
 
 	@Resource(name = "shardedJedisPool")
 	protected ShardedJedisPool shardedJedisPool;
-
+	
 	public ShardedJedis getConnection() {
 		return shardedJedisPool.getResource();
 	}

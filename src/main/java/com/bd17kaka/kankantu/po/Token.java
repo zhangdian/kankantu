@@ -11,7 +11,9 @@ public class Token implements java.io.Serializable {
 	 */
 	private String userId;
 
-	// sinaweibo里的 userid和username
+	/**
+	 * sinaweibo里的 userid和username
+	 */
 	private String uid;
 	private String userName;
 	private String token;
@@ -19,7 +21,6 @@ public class Token implements java.io.Serializable {
 
 	public Token() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Token(String userId, String uid, String userName, String token,

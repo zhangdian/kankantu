@@ -230,6 +230,14 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<!-- johm -->
+		<dependency>
+			<groupId>com.xetorthio</groupId>
+			<artifactId>johm</artifactId>
+			<version>v1.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<properties>

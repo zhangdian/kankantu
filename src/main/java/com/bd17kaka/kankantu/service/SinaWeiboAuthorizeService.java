@@ -11,10 +11,9 @@ public interface SinaWeiboAuthorizeService {
 	/**
 	 *  获取访问api的token
 	 * @param code
-	 * @param userid
 	 * @throws WeiboException
 	 */
-	void storeToken(String code, String userid) throws WeiboException;
+	void storeToken(String code, String userId) throws WeiboException;
 	
 	/**
 	 * 根据用户id获取token
