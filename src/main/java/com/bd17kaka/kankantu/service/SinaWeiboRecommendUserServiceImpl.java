@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import com.bd17kaka.kankantu.dao.SinaWeiboFollowDao;
 import com.bd17kaka.kankantu.dao.SinaWeiboTagDao;
 import com.bd17kaka.kankantu.dao.SinaWeiboTokenDao;
+import com.bd17kaka.kankantu.exception.KankantuException;
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
 import com.bd17kaka.kankantu.po.TagInfo;
 import com.bd17kaka.kankantu.po.Token;
+import com.bd17kaka.kankantu.utils.TimeUtils;
 import com.bd17kaka.kankantu.weibo4j.Search;
 import com.bd17kaka.kankantu.weibo4j.Users;
 import com.bd17kaka.kankantu.weibo4j.model.User;
@@ -35,14 +37,19 @@ public class SinaWeiboRecommendUserServiceImpl implements SinaWeiboRecommendUser
 	private SinaWeiboFollowDao sinaWeiboFollowDao;
 
 	@Override
-	public List<SinaWeiboRecommendUser> listRecommendUser(String userId, List<JSONObject> result) throws WeiboException {
+	public List<SinaWeiboRecommendUser> listRecommendUser(String userId, List<JSONObject> result) throws WeiboException, KankantuException {
 		// 参数检查
 		if (null == result) {
 			return null;
 		}
 		
 		// 获取用户的token
-		Token token = sinaWeiboTokenDao.get(userId);
+		Token token;
+		try {
+			token = sinaWeiboTokenDao.get(userId);
+		} catch (JSONException e1) {
+			throw new KankantuException("");
+		}
 		if (null == token) {
 			// 这里可以抛出一个异常，让用户去授权
 			return null;

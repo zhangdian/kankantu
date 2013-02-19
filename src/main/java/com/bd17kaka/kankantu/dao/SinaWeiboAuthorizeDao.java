@@ -2,6 +2,7 @@ package com.bd17kaka.kankantu.dao;
 
 import java.util.List;
 
+import com.bd17kaka.kankantu.exception.KankantuException;
 import com.bd17kaka.kankantu.po.SinaWeiboAuthorizeInfo;
 
 /**
@@ -13,8 +14,9 @@ public interface SinaWeiboAuthorizeDao {
 	 * 插入用户信息
 	 * @param user
 	 * @return
+	 * @throws KankantuException 
 	 */
-	Long insert(SinaWeiboAuthorizeInfo info, String userId);
+	Long insert(SinaWeiboAuthorizeInfo info, String userId) throws KankantuException;
 	
 	/**
 	 * 获取指定userId用户的所有授权历史信息

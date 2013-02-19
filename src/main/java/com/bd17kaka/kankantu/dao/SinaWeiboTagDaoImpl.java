@@ -13,6 +13,8 @@ import com.bd17kaka.kankantu.po.Token;
 import com.bd17kaka.kankantu.weibo4j.Tags;
 import com.bd17kaka.kankantu.weibo4j.model.Tag;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
+import com.bd17kaka.kankantu.weibo4j.org.json.JSONException;
+import com.bd17kaka.kankantu.weibo4j.org.json.JSONObject;
 
 /**
  * 用户taginfo信息DAO实现
@@ -51,12 +53,23 @@ public class SinaWeiboTagDaoImpl extends RedisUtils implements SinaWeiboTagDao {
 		ShardedJedis jedis =  getConnection(); 
 		
 		if (null == listTagInfo) {
-			return ;
+			return;
 		}
 		
 		String key = prefix + userId + ":tags";
+		
 		for (TagInfo tagInfo : listTagInfo) {
-			jedis.sadd(key, tagInfo.getTagName());
+			// 将TagInfo对象转换为JSONObject对象
+			JSONObject jo = new JSONObject();
+			try {
+				jo.put("tag_name", tagInfo.getTagName());
+			} catch (JSONException e) {
+				continue;
+			}
+			
+			// 将JSONObject格式的TagInfo对象保存到Redis
+			jedis.sadd(key, jo.toString());
+			// herehere
 		}
 		returnConnection(jedis);
 	}

@@ -3,6 +3,7 @@ package com.bd17kaka.kankantu.service;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.bd17kaka.kankantu.exception.KankantuException;
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
 import com.bd17kaka.kankantu.weibo4j.org.json.JSONArray;
@@ -16,8 +17,9 @@ public interface SinaWeiboRecommendUserService {
 	 * @param tagName
 	 * @return
 	 * @throws WeiboException 
+	 * @throws KankantuException 
 	 */
-	List<SinaWeiboRecommendUser> listRecommendUser(String userId, List<JSONObject> result) throws WeiboException;
+	List<SinaWeiboRecommendUser> listRecommendUser(String userId, List<JSONObject> result) throws WeiboException, KankantuException;
 	
 	/**
 	 * 根据sina微博的uid，获取该用户信息
