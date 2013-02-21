@@ -26,29 +26,6 @@ public class SinaWeiboTagDaoImpl extends RedisUtils implements SinaWeiboTagDao {
 	private static String prefix = "sinaweibo:tag:";
 
 	@Override
-	public List<TagInfo> listSinaWeiboTag(Token token) throws WeiboException {
-		// 设置访问接口
-		Tags t = new Tags();
-		t.setToken(token.getToken());
-		
-		// 获取所有tag
-		List<Tag> list = t.getTags(token.getUid());
-		if (null == list) {
-			return null;
-		}
-		
-		// 拼装成TagInfo
-		List<TagInfo> listTagInfo = new ArrayList<TagInfo>();
-		for (Tag tag : list) {
-			TagInfo tagInfo = new TagInfo();
-			tagInfo.setTagName(tag.getValue());
-			listTagInfo.add(tagInfo);
-		}
-		
-		return listTagInfo;
-	}
-
-	@Override
 	public void insert(List<TagInfo> listTagInfo, String userId) {
 		ShardedJedis jedis =  getConnection(); 
 		
@@ -64,12 +41,12 @@ public class SinaWeiboTagDaoImpl extends RedisUtils implements SinaWeiboTagDao {
 			try {
 				jo.put("tag_name", tagInfo.getTagName());
 			} catch (JSONException e) {
+				// 丢一个就丢一个，有啥关系
 				continue;
 			}
 			
 			// 将JSONObject格式的TagInfo对象保存到Redis
 			jedis.sadd(key, jo.toString());
-			// herehere
 		}
 		returnConnection(jedis);
 	}
@@ -87,8 +64,18 @@ public class SinaWeiboTagDaoImpl extends RedisUtils implements SinaWeiboTagDao {
 		// 拼装成TagInfo对象
 		List<TagInfo> list = new ArrayList<TagInfo>();
 		for (String s : set) {
+			// 将字符串格式的TagInfo对象转换成JSON格式
+			JSONObject jo = new JSONObject();
+			jo = (JSONObject) JSONObject.stringToValue(s);
+			
+			// 拼装成TagInfo对象
 			TagInfo tagInfo = new TagInfo();
-			tagInfo.setTagName(s);
+			try {
+				tagInfo.setTagName(jo.getString("tag_name"));
+			} catch (JSONException e) {
+				// 丢一个就丢一个，有啥关系
+				continue;
+			}
 			list.add(tagInfo);
 		}
 		returnConnection(jedis);
@@ -98,6 +85,7 @@ public class SinaWeiboTagDaoImpl extends RedisUtils implements SinaWeiboTagDao {
 	@Override
 	public TagInfo get(String tagName) {
 		// 暂时只有一个tagName字段
+		// 不需要去查找咯
 		return new TagInfo(tagName);
 	}
 }

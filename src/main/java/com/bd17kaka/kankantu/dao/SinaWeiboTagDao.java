@@ -13,15 +13,6 @@ import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
 public interface SinaWeiboTagDao {
 	
 	///////////////////////////////////////////////////////////////////////////
-	// 获取用户在sina微博中的tag信息
-	/**
-	 * 获取所有tag信息
-	 * @param token
-	 * @return
-	 * @throws WeiboException 
-	 */
-	List<TagInfo> listSinaWeiboTag(Token token) throws WeiboException;
-	
 	///////////////////////////////////////////////////////////////////////////
 	// redis中tag信息操作
 	/**
