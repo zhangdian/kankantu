@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -14,11 +15,15 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bd17kaka.kankantu.constant.ConstatVar;
+import com.bd17kaka.kankantu.exception.KankantuException;
+import com.bd17kaka.kankantu.exception.UserNotAuthorizeException;
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
 import com.bd17kaka.kankantu.po.TagInfo;
 import com.bd17kaka.kankantu.service.SinaWeiboRecommendUserService;
 import com.bd17kaka.kankantu.service.SinaWeiboTagService;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
+import com.bd17kaka.kankantu.weibo4j.org.json.JSONException;
 import com.bd17kaka.kankantu.weibo4j.org.json.JSONObject;
 
 /**
@@ -42,7 +47,7 @@ public class SinaWeiboRecommendUserContoller extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("listRecommendUser.do")
-	public String listRecommendUser(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public String listRecommendUser(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		String userId = request.getSession().getAttribute("kankantu_userid").toString();
 		
 		// 参数判断
@@ -55,20 +60,57 @@ public class SinaWeiboRecommendUserContoller extends BaseController {
 		
 		// 获取推荐用户
 		// 首选获取所有的推荐用户信息
-		LinkedList<JSONObject> result = sinaWeiboRecommendUserService.getAllRecommendUser(userId, tagName);
-		System.out.println(result.size());
+		LinkedList<JSONObject> result = null;
+		try {
+			result = sinaWeiboRecommendUserService.getAllRecommendUser(userId, tagName);
+		} catch (KankantuException e) {
+			writeHtml(request, response, "I'm very very very sorry, 我们内部好像出了点问题~~~");
+		} catch (UserNotAuthorizeException e) {
+			writeHtml(request, response, "好像没有授权哦，或者授权过期啦~~~，快去授权吧！");
+		}
 		if (null == result) {
 			request.setAttribute("list", null);
 		} else {
+			System.out.println(result.size());
 			List<List<SinaWeiboRecommendUser>> list = new ArrayList<List<SinaWeiboRecommendUser>>();
-			for (int i = 0; i < 6; ++i) { // 6列
-				List<JSONObject> subArray = new ArrayList<JSONObject>();
-				for (int j = 0; j < 3; ++j) {
-					subArray.add(result.pop());
+			boolean isEmpty = false;
+			for (int i = 0; i < ConstatVar.COL_NUM; i++) { // 6列
+				// 获取推荐用户信息，每列只有三个用户，但是拼装成一个List
+				List<SinaWeiboRecommendUser> listCol = new ArrayList<SinaWeiboRecommendUser>();
+
+				for (int j = 0; j < 3;) {
+					JSONObject jo = null;
+					try {
+						jo = result.pop();
+					} catch (NoSuchElementException e){
+						isEmpty = true;
+						break;
+					}
+					System.out.println(result.size());
+					
+					String uid;
+					try {
+						uid = jo.getString("uid");
+					} catch (JSONException e1) {
+						continue;
+					}
+					try {
+						SinaWeiboRecommendUser sinaWeiboRecommendUser = sinaWeiboRecommendUserService.getByUid(userId, uid);
+						if (null != sinaWeiboRecommendUser) {
+							listCol.add(sinaWeiboRecommendUser);
+							j++;
+						}
+					} catch (WeiboException e) {
+					} catch (KankantuException e) {
+					} catch (UserNotAuthorizeException e) {
+						writeHtml(request, response, "好像没有授权哦，或者授权过期啦~~~，快去授权吧！");
+						return "";
+					}
 				}
-//				List<JSONObject> subArray = result.subList(3 * i, 3 * (i + 1));
-				List<SinaWeiboRecommendUser> listCol = sinaWeiboRecommendUserService.listRecommendUser(userId, subArray);
 				list.add(listCol);
+				if (isEmpty) {
+					break;
+				}
 			}
 			request.setAttribute("list", list);
 //			request.getSession().setAttribute("all_recommend_user", result.subList(6 * 3, result.size()));
@@ -91,28 +133,54 @@ public class SinaWeiboRecommendUserContoller extends BaseController {
 	 * @throws WeiboException
 	 */              
 	@RequestMapping("listMoreRecommendUser.do")
-	public void listMoreRecommendUser(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public void listMoreRecommendUser(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  {
 		String userId = request.getSession().getAttribute("kankantu_userid").toString();
 		String curTag = request.getSession().getAttribute("cur_tag").toString();
 		
 		@SuppressWarnings("unchecked")
-		List<JSONObject> result = (List<JSONObject>) request.getSession().getAttribute("all_recommend_user");
+		LinkedList<JSONObject> result = (LinkedList<JSONObject>) request.getSession().getAttribute("all_recommend_user");
 		if (null == result) {
 			writeHtml(request, response, "没有更多");
 			return;
 		}
 
 		//  获取最新的6个推荐用户信息
-		List<JSONObject> subArray = new ArrayList<JSONObject>();
-		List<SinaWeiboRecommendUser> list = null;
-		for (int i = 0; i < ((result.size() < 2) ? result.size() : 2); i++) {
-			subArray.add((JSONObject)((LinkedList<JSONObject>) request.getSession().getAttribute("all_recommend_user")).pop());
+		List<SinaWeiboRecommendUser> list = new ArrayList<SinaWeiboRecommendUser>();
+		for (int i = 0; i < 6;) {
+			JSONObject jo = null;
+			try {
+				jo = result.pop();
+			} catch (NoSuchElementException e){
+				break;
+			}
+			System.out.println(result.size());
+			
+			// 获取推荐用户信息，每列只有一个用户，但是拼装成一个List
+			String uid;
+			try {
+				uid = jo.getString("uid");
+			} catch (JSONException e1) {
+				continue;
+			}
+			
+			try {
+				SinaWeiboRecommendUser sinaWeiboRecommendUser = sinaWeiboRecommendUserService.getByUid(userId, uid);
+				if (null != sinaWeiboRecommendUser) {
+					list.add(sinaWeiboRecommendUser);
+					i++;
+				}
+			} catch (WeiboException e) {
+			} catch (KankantuException e) {
+			} catch (UserNotAuthorizeException e) {
+				writeHtml(request, response, "好像没有授权哦，或者授权过期啦~~~，快去授权吧！");
+			}
 		}
 		
-		list = sinaWeiboRecommendUserService.listRecommendUser(userId, subArray);
 		// 拼装成html
 		String msg = "";
+		msg += "<div class=\"row-fluid\">";
 		for (SinaWeiboRecommendUser s : list) {
+			msg += "<div class=\"span2\">";
 			msg += "<div class='thumbnail'>" +
 						"<a href='#'>" +
 							"<img src='" + s.getProfileImageURL() + "' alt=''>" +
@@ -127,8 +195,9 @@ public class SinaWeiboRecommendUserContoller extends BaseController {
 							) +
 						"</div>" + 
 					"</div>";
+			msg += "</div>";
 		}
-		System.out.println(msg);
+		msg += "</div>";
 		writeHtml(request, response, msg);
 	}
 }

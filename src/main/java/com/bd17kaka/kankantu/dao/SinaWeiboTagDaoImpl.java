@@ -65,8 +65,12 @@ public class SinaWeiboTagDaoImpl extends RedisUtils implements SinaWeiboTagDao {
 		List<TagInfo> list = new ArrayList<TagInfo>();
 		for (String s : set) {
 			// 将字符串格式的TagInfo对象转换成JSON格式
-			JSONObject jo = new JSONObject();
-			jo = (JSONObject) JSONObject.stringToValue(s);
+			JSONObject jo = null;
+			try {
+				jo = new JSONObject(s);
+			} catch (JSONException e1) {
+				continue;
+			}
 			
 			// 拼装成TagInfo对象
 			TagInfo tagInfo = new TagInfo();

@@ -1,6 +1,7 @@
 package com.bd17kaka.kankantu.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,7 +13,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bd17kaka.kankantu.exception.KankantuException;
 import com.bd17kaka.kankantu.exception.SinaweiboUserNotFoundException;
+import com.bd17kaka.kankantu.exception.UserNotAuthorizeException;
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
 import com.bd17kaka.kankantu.po.TagInfo;
 import com.bd17kaka.kankantu.service.SinaWeiboFollowService;
@@ -40,7 +43,7 @@ public class SinaWeiboFollowContoller extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("addFollow.do")
-	public void addFollow(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public void addFollow(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		String userId = request.getSession().getAttribute("kankantu_userid").toString();
 		// 参数检查
 		String tagName = StringUtils.trimToEmpty(request.getParameter("tag_name"));
@@ -53,10 +56,12 @@ public class SinaWeiboFollowContoller extends BaseController {
 		// 保存关注的用户
 		try {
 			sinaWeiboFollowService.addFollow(userId, uid, tagName);
-		} catch (SinaweiboUserNotFoundException e) {
-			writeHtml(request, response, "用户不存在");
 		} catch (WeiboException e) {
-			// return error page;
+			writeHtml(request, response, "连接Sina微博好像出了点问题~~~");
+		} catch (KankantuException e) {
+			writeHtml(request, response, "I'm very very very sorry, 我们内部好像出了点问题~~~");
+		} catch (UserNotAuthorizeException e) {
+			writeHtml(request, response, "好像没有授权哦，或者授权过期啦~~~，快去授权吧！");
 		}
 	}
 	
@@ -69,7 +74,7 @@ public class SinaWeiboFollowContoller extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("deleteFollow.do")
-	public void deleteFollow(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public void deleteFollow(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		String userId = request.getSession().getAttribute("kankantu_userid").toString();
 		// 参数检查
 		String tagName = StringUtils.trimToEmpty(request.getParameter("tag_name"));
@@ -82,10 +87,12 @@ public class SinaWeiboFollowContoller extends BaseController {
 		// 删除关注的用户
 		try {
 			sinaWeiboFollowService.deleteFollow(userId, uid, tagName);
-		} catch (SinaweiboUserNotFoundException e) {
-			writeHtml(request, response, "用户不存在");
 		} catch (WeiboException e) {
-			// return error page;
+			writeHtml(request, response, "连接Sina微博好像出了点问题~~~");
+		} catch (KankantuException e) {
+			writeHtml(request, response, "I'm very very very sorry, 我们内部好像出了点问题~~~");
+		} catch (UserNotAuthorizeException e) {
+			writeHtml(request, response, "好像没有授权哦，或者授权过期啦~~~，快去授权吧！");
 		}
 	}
 	
@@ -98,7 +105,7 @@ public class SinaWeiboFollowContoller extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("showFollows.do")
-	public String showFollows(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public String showFollows(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		String userId = request.getSession().getAttribute("kankantu_userid").toString();
 		// 参数检查
 		String tagName = StringUtils.trimToEmpty(request.getParameter("tag_name"));
@@ -108,8 +115,18 @@ public class SinaWeiboFollowContoller extends BaseController {
 		}
 		
 		// 获取当前tag_name分组，关注的用户
-		List<SinaWeiboRecommendUser> list = sinaWeiboFollowService.list(userId, tagName);
-		request.setAttribute("list_user", list);
+		List<SinaWeiboRecommendUser> list = null;
+		try {
+			list = sinaWeiboFollowService.list(userId, tagName);
+			System.out.println("GGGGGGGGGGG:" + list.size());
+		} catch (KankantuException e) {
+			writeHtml(request, response, "I'm very very very sorry, 我们内部好像出了点问题~~~");
+		} catch (UserNotAuthorizeException e) {
+			writeHtml(request, response, "好像没有授权哦，或者授权过期啦~~~，快去授权吧！");
+		}
+		List<List<SinaWeiboRecommendUser>> listSinaWeiboRecommendUser = new ArrayList<List<SinaWeiboRecommendUser>>();
+		listSinaWeiboRecommendUser.add(list);
+		request.setAttribute("list", listSinaWeiboRecommendUser);
 		
 		// 获取所有tag，设置cur_tag
 		List<TagInfo> list2 = sinaWeiboTagService.list(userId);

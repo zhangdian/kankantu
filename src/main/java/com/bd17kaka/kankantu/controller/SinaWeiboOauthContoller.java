@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bd17kaka.kankantu.exception.KankantuException;
 import com.bd17kaka.kankantu.exception.StoreTokenException;
 import com.bd17kaka.kankantu.po.SinaWeiboAuthorizeInfo;
 import com.bd17kaka.kankantu.po.Token;
@@ -44,10 +45,14 @@ public class SinaWeiboOauthContoller extends BaseController {
 	 * @throws WeiboException 
 	 */
 	@RequestMapping("/openOathPage.do")
-	public void openOathPage(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public void openOathPage(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		// 不要使用weibo sdk自带的跳转函数，就直接跳转到授权页面
 		Oauth oauth = new Oauth();
-		response.sendRedirect(oauth.authorize("code", key, password));
+		try {
+			response.sendRedirect(oauth.authorize("code", key, password));
+		} catch (WeiboException e) {
+			writeHtml(request, response, "连接Sina微博好像出了点问题~~~");
+		}
 	}
 	
 	/**
@@ -59,7 +64,7 @@ public class SinaWeiboOauthContoller extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("/getToken.do")
-	public void getToken(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public void getToken(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		String code = StringUtils.trimToEmpty(request.getParameter("code"));
 		if (StringUtils.isEmpty(code)) {
 			response.sendRedirect("sinaWeiboAuthorizeStatus.do");
@@ -68,9 +73,10 @@ public class SinaWeiboOauthContoller extends BaseController {
 		try {
 			sinaWeiboAuthorizeService.storeToken(code, request.getSession().getAttribute("kankantu_userid").toString());
 			response.sendRedirect("sinaWeiboAuthorizeStatus.do");
-		} catch (StoreTokenException e) {
-			e.toString();
-			response.sendRedirect("sinaWeiboAuthorizeStatus.do");
+		} catch (WeiboException e) {
+			writeHtml(request, response, "连接Sina微博好像出了点问题~~~");
+		} catch (KankantuException e) {
+			writeHtml(request, response, "I'm very very very sorry, 我们内部好像出了点问题~~~");
 		}
 		return;
 	}
@@ -84,9 +90,14 @@ public class SinaWeiboOauthContoller extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("/sinaWeiboAuthorizeStatus.do")
-	public String sinaWeiboAuthorizeStatus(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public String sinaWeiboAuthorizeStatus(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  {
 		String userId = request.getSession().getAttribute("kankantu_userid").toString();
-		Token token = sinaWeiboAuthorizeService.getTokenByUserId(userId);
+		Token token = null;;
+		try {
+			token = sinaWeiboAuthorizeService.getTokenByUserId(userId);
+		} catch (KankantuException e) {
+			writeHtml(request, response, "I'm very very very sorry, 我们内部好像出了点问题~~~");
+		}
 		if (null != token) {
 			request.setAttribute("token", token);
 			int hour = Integer.parseInt(token.getExpire()) / 3600;
@@ -108,7 +119,7 @@ public class SinaWeiboOauthContoller extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("/listSinaWeiboAuthorize.do")
-	public String listSinaWeiboAuthorize(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public String listSinaWeiboAuthorize(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		Object userId = request.getSession().getAttribute("kankantu_userid");
 		if (null == userId) {
 			return "index";

@@ -1,5 +1,6 @@
 package com.bd17kaka.kankantu.dao;
 
+import org.codehaus.jackson.JsonParser;
 import org.springframework.stereotype.Repository;
 
 import redis.clients.jedis.ShardedJedis;
@@ -62,8 +63,13 @@ public class SinaWeiboTokenDaoImpl extends RedisUtils implements SinaWeiboTokenD
 		Long expire = jedis.ttl(key);
 		
 		// 将JSON格式的字符串转换为JSON对象
-		JSONObject jo = new JSONObject();
-		jo = (JSONObject) JSONObject.stringToValue(value);
+		JSONObject jo = null;
+		try {
+			jo = new JSONObject(value);
+		} catch (JSONException e1) {
+			return null;
+		}
+//		jo = (JSONObject) JSONObject.stringToValue(value);
 		if (null == jo) {
 			return null;
 		}

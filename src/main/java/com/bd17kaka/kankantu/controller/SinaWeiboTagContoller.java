@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bd17kaka.kankantu.exception.KankantuException;
+import com.bd17kaka.kankantu.exception.UserNotAuthorizeException;
 import com.bd17kaka.kankantu.po.TagInfo;
 import com.bd17kaka.kankantu.service.SinaWeiboTagService;
 import com.bd17kaka.kankantu.service.WeiboService;
@@ -37,9 +39,17 @@ public class SinaWeiboTagContoller extends BaseController {
 	 * @throws WeiboException
 	 */
 	@RequestMapping("syncSinaWeiboTag.do")
-	public void syncSinaWeiboTag(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException, WeiboException  {
+	public void syncSinaWeiboTag(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  {
 		String userId = request.getSession().getAttribute("kankantu_userid").toString();
-		sinaWeiboTagService.syncSinaWeiboTags(userId);
+		try {
+			sinaWeiboTagService.syncSinaWeiboTags(userId);
+		} catch (WeiboException e) {
+			writeHtml(request, response, "连接Sina微博好像出了点问题~~~");
+		} catch (UserNotAuthorizeException e) {
+			writeHtml(request, response, "I'm very very very sorry, 我们内部好像出了点问题~~~");
+		} catch (KankantuException e) {
+			writeHtml(request, response, "好像没有授权哦，或者授权过期啦~~~，快去授权吧！");
+		}
 		response.sendRedirect("listSinaWeiboTag.do");
 		return;
 	}

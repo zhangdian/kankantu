@@ -6,6 +6,7 @@ import redis.clients.jedis.ShardedJedis;
 import redis.clients.johm.JOhm;
 
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
+import com.bd17kaka.kankantu.weibo4j.http.BASE64Encoder;
 
 /**
  * 关注者Dao实现
@@ -30,7 +31,7 @@ public class SinaWeiboFollowDaoImpl extends RedisUtils implements SinaWeiboFollo
 		jedis.sadd(key, tagName);
 		
 		// 保存数据到 sinaweibo:tag:userid:tagname:follows
-		key = "sinaweibo:tag:" + userId + ":" + tagName + ":follows";
+		key = tagPrefix + userId + ":" + BASE64Encoder.encode(tagName.getBytes()) + ":follows";
 		jedis.sadd(key, user.getUserId());
 		
 		returnConnection(jedis);
@@ -72,10 +73,18 @@ public class SinaWeiboFollowDaoImpl extends RedisUtils implements SinaWeiboFollo
 	public Set<String> list(String userId, String tagName) {
 		ShardedJedis jedis =  getConnection(); 
 		
-		String key = tagPrefix + userId + ":" + tagName + ":follows";
+		String key = tagPrefix + userId + ":" + BASE64Encoder.encode(tagName.getBytes()) + ":follows";
+		System.out.println(key);
 		Set<String> set = jedis.smembers(key);
+		System.out.println(set.size());
 		
 		returnConnection(jedis);
 		return set;
+	}
+	public static void main(String[] args) {
+		String s = "哈哈";
+		System.out.println(BASE64Encoder.encode(s.getBytes()));
+		System.out.println(BASE64Encoder.encode(s.getBytes()));
+		System.out.println(BASE64Encoder.encode(s.getBytes()));
 	}
 }

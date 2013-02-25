@@ -46,7 +46,7 @@ public class SinaWeiboAuthorizeDaoImpl extends RedisUtils implements SinaWeiboAu
 		String key = null;
 		
 		// 保存JSONObject格式的字符串到Redis
-		key = keyPrefix + "id";
+		key = keyPrefix + id;
 		jedis.set(key, jo.toString());
 		
 		// 将授权id保存到授权id列表中
@@ -83,8 +83,12 @@ public class SinaWeiboAuthorizeDaoImpl extends RedisUtils implements SinaWeiboAu
 			}
 			
 			// 将JSON格式的字符串转换为JSON对象
-			JSONObject jo = new JSONObject();
-			jo = (JSONObject) JSONObject.stringToValue(value);
+			JSONObject jo = null;
+			try {
+				jo = new JSONObject(value);
+			} catch (JSONException e1) {
+				return null;
+			}
 			if (null == jo) {
 				return null;
 			}
