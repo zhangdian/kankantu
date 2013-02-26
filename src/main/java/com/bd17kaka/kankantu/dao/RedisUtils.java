@@ -10,7 +10,6 @@ import com.bd17kaka.kankantu.po.Token;
 
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
-import redis.clients.johm.JOhm;
 
 @Repository
 public class RedisUtils {

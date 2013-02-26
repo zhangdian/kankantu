@@ -231,13 +231,13 @@
 			<scope>compile</scope>
 		</dependency>
 		<!-- johm -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>com.xetorthio</groupId>
 			<artifactId>johm</artifactId>
 			<version>v1.0</version>
 			<type>jar</type>
 			<scope>compile</scope>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 
 	<properties>

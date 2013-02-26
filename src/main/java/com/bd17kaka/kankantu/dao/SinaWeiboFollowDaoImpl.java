@@ -3,8 +3,6 @@ package com.bd17kaka.kankantu.dao;
 import java.util.Set;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.ShardedJedis;
-import redis.clients.johm.JOhm;
-
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
 import com.bd17kaka.kankantu.weibo4j.http.BASE64Encoder;
 
