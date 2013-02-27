@@ -143,7 +143,6 @@ public class SinaWeiboRecommendUserServiceImpl implements SinaWeiboRecommendUser
 		LinkedList<JSONObject> list = new LinkedList<JSONObject>();
 		for (int i = 0; i < result.length(); i++) {
 			try {
-//				list.add((JSONObject)result.get(i));
 				list.push((JSONObject)result.get(i));
 			} catch (JSONException e) {
 			}

@@ -86,7 +86,6 @@ public class SinaWeiboRecommendUserContoller extends BaseController {
 						isEmpty = true;
 						break;
 					}
-					System.out.println(result.size());
 					
 					String uid;
 					try {
