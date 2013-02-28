@@ -29,9 +29,6 @@ public class SinaWeiboOauthContoller extends BaseController {
 	private static String key = "3790992882";
 	private static String password = "fa1b2986b8fcb881802c7ac811ef2d33";
 
-/*	@Resource(name="weiboService")
-	private WeiboService weiboService;*/
-	
 	@Resource(name="sinaWeiboAuthorizeService")
 	private SinaWeiboAuthorizeService sinaWeiboAuthorizeService;
 	
@@ -71,7 +68,15 @@ public class SinaWeiboOauthContoller extends BaseController {
 			return; 
 		}
 		try {
+			// 保存token
 			sinaWeiboAuthorizeService.storeToken(code, request.getSession().getAttribute("kankantu_userid").toString());
+			
+			// 同步tag
+			
+			
+			// 同步关注者的分组
+			
+			
 			response.sendRedirect("sinaWeiboAuthorizeStatus.do");
 		} catch (WeiboException e) {
 			writeHtml(request, response, "连接Sina微博好像出了点问题~~~");

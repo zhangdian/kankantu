@@ -117,7 +117,7 @@ public class SinaWeiboFollowContoller extends BaseController {
 		// 获取当前tag_name分组，关注的用户
 		List<SinaWeiboRecommendUser> list = null;
 		try {
-			list = sinaWeiboFollowService.list(userId, tagName);
+			list = sinaWeiboFollowService.listFollowByTag(userId, tagName);
 			System.out.println("GGGGGGGGGGG:" + list.size());
 		} catch (KankantuException e) {
 			writeHtml(request, response, "I'm very very very sorry, 我们内部好像出了点问题~~~");

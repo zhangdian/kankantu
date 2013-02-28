@@ -14,7 +14,7 @@ public class SinaWeiboRecommendUser implements java.io.Serializable {
 	 */
 	private String userName;
 	/**
-	 * follows_count粉丝数
+	 * sina微博里的follows_count粉丝数
 	 */
 	private String followCount;
 	/**

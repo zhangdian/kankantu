@@ -39,5 +39,14 @@ public interface SinaWeiboFollowService {
 	 * @throws UserNotAuthorizeException 
 	 * @throws KankantuException 
 	 */
-	List<SinaWeiboRecommendUser> list(String userId, String tagName) throws KankantuException, UserNotAuthorizeException;
+	List<SinaWeiboRecommendUser> listFollowByTag(String userId, String tagName) throws KankantuException, UserNotAuthorizeException;
+	
+	/**
+	 * 同步用户在sina微博里关注的用户到kankantu
+	 * @param userId
+	 * @throws KankantuException 
+	 * @throws UserNotAuthorizeException 
+	 * @throws WeiboException 
+	 */
+	void syncSinaWeiboFollows(String userId) throws KankantuException, UserNotAuthorizeException, WeiboException;
 }

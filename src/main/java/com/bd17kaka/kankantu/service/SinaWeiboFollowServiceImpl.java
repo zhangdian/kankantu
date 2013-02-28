@@ -9,15 +9,21 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.bd17kaka.kankantu.dao.SinaWeiboFollowDao;
+import com.bd17kaka.kankantu.dao.SinaWeiboTokenDao;
 import com.bd17kaka.kankantu.exception.KankantuException;
 import com.bd17kaka.kankantu.exception.SinaweiboUserNotFoundException;
 import com.bd17kaka.kankantu.exception.UserNotAuthorizeException;
 import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
+import com.bd17kaka.kankantu.po.Token;
+import com.bd17kaka.kankantu.weibo4j.Friendships;
 import com.bd17kaka.kankantu.weibo4j.model.WeiboException;
 
 @Service(value = "sinaWeiboFollowService")
 public class SinaWeiboFollowServiceImpl implements SinaWeiboFollowService {
 
+	@Resource(name = "sinaWeiboTokenDao")
+	private SinaWeiboTokenDao sinaWeiboTokenDao;
+	
 	@Resource(name = "sinaWeiboFollowDao")
 	private SinaWeiboFollowDao sinaWeiboFollowDao;
 	
@@ -49,7 +55,7 @@ public class SinaWeiboFollowServiceImpl implements SinaWeiboFollowService {
 	}
 
 	@Override
-	public List<SinaWeiboRecommendUser> list(String userId, String tagName) throws KankantuException, UserNotAuthorizeException {
+	public List<SinaWeiboRecommendUser> listFollowByTag(String userId, String tagName) throws KankantuException, UserNotAuthorizeException {
 		Set<String> set = sinaWeiboFollowDao.list(userId, tagName);
 		if (null == set) {
 			return null;
@@ -68,5 +74,23 @@ public class SinaWeiboFollowServiceImpl implements SinaWeiboFollowService {
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public void syncSinaWeiboFollows(String userId) throws KankantuException, UserNotAuthorizeException, WeiboException {
+		// 获取用户的token
+		Token token = null;
+		token = sinaWeiboTokenDao.get(userId);
+		if (null == token) {
+			throw new UserNotAuthorizeException("用户没有授权，或者授权过期");
+		}
+		
+		// 获取用户的关注者id列表
+		Friendships h = new Friendships();
+		h.setToken(token.getToken());
+		String[] ids = h.getFriendsIdsByUid(token.getUid());
+		
+		// 将用户的关注者列表保存到数据库
+		sinaWeiboFollowDao.insertSinaWeiboFollow(userId, ids);
 	}
 }

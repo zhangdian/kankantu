@@ -12,6 +12,14 @@ import com.bd17kaka.kankantu.po.SinaWeiboRecommendUser;
 public interface SinaWeiboFollowDao {
 
 	/**
+	 * 将新浪微博关注的用户保存到redis
+	 * @param userId 我们系统中的用户ID
+	 * @param followUids sinaweibo关注者的uid
+	 * @param user
+	 */
+	void insertSinaWeiboFollow(String userId, String[] followUids);
+	
+	/**
 	 * 保存关注的用户到redis
 	 * @param userId 我们系统中的用户ID
 	 * @param user

@@ -17,9 +17,24 @@ public class SinaWeiboFollowDaoImpl extends RedisUtils implements SinaWeiboFollo
 	private String tagPrefix = "sinaweibo:tag:";
 	
 	@Override
+	public void insertSinaWeiboFollow(String userId, String[] followUids) {
+		ShardedJedis jedis =  getConnection(); 
+		String key = null;
+		
+		// 保存数据到 sinaweibo:follow:userid:sinaweibofollows
+		key = followPrefix + userId + ":sinaweibofollows";
+		for (String uid : followUids) {
+			jedis.sadd(key, uid);
+		}
+		
+		returnConnection(jedis);
+	}
+	
+	@Override
 	public void insert(String userId, SinaWeiboRecommendUser user, String tagName) {
 		ShardedJedis jedis =  getConnection(); 
 		String key = null;
+		
 		// 保存数据到 sinaweibo:follow:userid:follows
 		key = followPrefix + userId + ":follows";
 		jedis.sadd(key, user.getUserId());
@@ -49,6 +64,7 @@ public class SinaWeiboFollowDaoImpl extends RedisUtils implements SinaWeiboFollo
 			String tagName) {
 		ShardedJedis jedis =  getConnection(); 
 		String key = null;
+		
 		// 删除数据 sinaweibo:tag:userid:tagname:follows
 		key = tagPrefix + userId + ":" + tagName + ":follows";
 		jedis.srem(key, user.getUserId());
@@ -79,10 +95,5 @@ public class SinaWeiboFollowDaoImpl extends RedisUtils implements SinaWeiboFollo
 		returnConnection(jedis);
 		return set;
 	}
-	public static void main(String[] args) {
-		String s = "哈哈";
-		System.out.println(BASE64Encoder.encode(s.getBytes()));
-		System.out.println(BASE64Encoder.encode(s.getBytes()));
-		System.out.println(BASE64Encoder.encode(s.getBytes()));
-	}
+
 }
